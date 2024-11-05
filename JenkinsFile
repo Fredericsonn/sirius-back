@@ -1,9 +1,9 @@
 pipeline {
-    agent { dockerContainer { image 'ecotracer/front' } }
+    agent { dockerContainer { image 'ecotracer/back' } }
     environment {
-        REPO_URL = "https://github.com/Fredericsonn/sirius-front.git"
+        REPO_URL = "https://github.com/Fredericsonn/sirius-back.git"
         REMOTE_USER = "eco"
-        REMOTE_HOST = "172.31.253.53"
+        REMOTE_HOST = "172.31.250.187"
         REMOTE_PATH = "/home/eco/app"
     }
     stages {
@@ -16,23 +16,23 @@ pipeline {
             steps {
                 script {    
                     sh '''
-                        npm install
-                        npm run build
+                        mvn clean package
                     '''
                 }
             }
         }
         stage("Archive artifact") {
             steps {
-                archiveArtifacts artifacts : "build/*", allowEmptyArchive: false
+                archiveArtifacts artifacts : "target/*.jar", allowEmptyArchive: false
             }
         }
         stage("Deploy to the front server") {
             steps {
-                sshagent(['frontend']) { 
+                sshagent(['backend']) { 
                     sh """
-                        scp -o StrictHostKeyChecking=no -r build/ "${env.REMOTE_USER}"@"${env.REMOTE_HOST}":/home/eco/app
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" 'source /home/eco/.nvm/nvm.sh && nvm use 20 && cd ${env.REMOTE_PATH} && screen -d -m serve -s ./build'
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "if lsof -ti:8080 > /dev/null; then kill -9 \$(lsof -ti:8080); fi; rm -rf ${env.REMOTE_PATH}/*"
+                        scp -o StrictHostKeyChecking=no target/*.jar "${env.REMOTE_USER}"@"${env.REMOTE_HOST}":"${env.REMOTE_PATH}"
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" 'cd ${env.REMOTE_PATH} && screen -d -m java -jar target/eco-0.0.1-SNAPSHOT.jar'
                         """
                 }
                 
