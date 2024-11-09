@@ -26,7 +26,7 @@ pipeline {
                 archiveArtifacts artifacts : "target/*.jar", allowEmptyArchive: false
             }
         }
-        stage("Deploy to the front server") {
+        stage("Deploy to the back server") {
             steps {
                 sshagent(['backend']) { 
                     sh """
