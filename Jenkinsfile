@@ -30,9 +30,9 @@ pipeline {
             steps {
                 sshagent(['backend']) { 
                     sh """
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "if lsof -ti:8080 > /dev/null; then kill -9 \$(lsof -ti:8080); fi; rm -rf ${env.REMOTE_PATH}/*"
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "lsof -ti:8080 | xargs -r kill -9; rm -rf ${env.REMOTE_PATH}/*"
                         scp -o StrictHostKeyChecking=no target/*.jar "${env.REMOTE_USER}"@"${env.REMOTE_HOST}":"${env.REMOTE_PATH}"
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" 'cd ${env.REMOTE_PATH} && screen -d -m java -jar target/eco-0.0.1-SNAPSHOT.jar'
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" 'cd ${env.REMOTE_PATH} && screen -dmS spring java -jar target/eco-0.0.1-SNAPSHOT.jar'
                         """
                 }
                 
