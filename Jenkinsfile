@@ -3,8 +3,6 @@ pipeline {
     environment {
         REPO_URL = "https://github.com/Fredericsonn/sirius-back.git"
         REMOTE_USER = "eco"
-        REMOTE_HOST = "172.31.250.187"
-        REMOTE_PATH = "/home/eco/app"
     }
     stages {
         stage('Cloning the repository') {
@@ -23,17 +21,39 @@ pipeline {
         }
         stage("Archive artifact") {
             steps {
-                archiveArtifacts artifacts : "target/*.jar", allowEmptyArchive: false
+                archiveArtifacts artifacts : "target/*.jar, ./Dockerfile", allowEmptyArchive: false
+            }
+        }
+        stage("Building Docker Image") {
+            steps {
+                script {
+                    sh 'docker build -t ${IMAGE_NAME} .'
+                }
+            }
+        }
+        stage("Pushing Image to DockerHub") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                        docker login -u $USERNAME -p $PASSWORD
+                        docker push ${IMAGE_NAME}
+                    '''
+                }
             }
         }
         stage("Deploy to the back server") {
+            agent {
+                docker {
+                    image 'docker:cli'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             steps {
                 sshagent(['backend']) { 
                     sh """
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "lsof -ti:8080 | xargs -r kill -9; rm -rf ${env.REMOTE_PATH}/*"
-                        scp -o StrictHostKeyChecking=no target/*.jar "${env.REMOTE_USER}"@"${env.REMOTE_HOST}":"${env.REMOTE_PATH}"
-                        ssh -t -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" 'cd ${env.REMOTE_PATH} && screen -dmS spring java -jar eco-0.0.1-SNAPSHOT.jar'
-                        """
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "lsof -ti:8080 | xargs -r kill -9; docker rm -f backend"
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker rmi -f ${IMAGE_NAME} && docker run -d --name backend -p 8080:8080 -e DB=${DATABASE_URL} ${IMAGE_NAME}"
+                    """
                 }
                 
             }
