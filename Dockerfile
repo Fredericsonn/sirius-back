@@ -1,16 +1,9 @@
-FROM jenkins/inbound-agent
+FROM openjdk:23-jdk
 
-USER root
+WORKDIR /usr/src/app
 
-# Update package lists and install Mjenkins/inbound-agentaven
-RUN apt-get update --allow-releaseinfo-change && \
-    apt-get install -y maven && \
-    rm -rf /var/lib/apt/lists/*
+COPY ./*jar .
 
-# Instll lsof
-RUN apt-get update && apt-get install -y lsof
+EXPOSE 8080
 
-ENV MAVEN_HOME=/usr/share/maven
-ENV PATH="${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${PATH}"
-
-USER jenkins
+ENTRYPOINT ["java", "-jar", "eco-0.0.1-SNAPSHOT.jar"]

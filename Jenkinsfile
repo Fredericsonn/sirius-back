@@ -1,5 +1,5 @@
 pipeline {
-    agent { dockerContainer { image 'ecotracer/back' } }
+    agent none
     environment {
         REPO_URL = "https://github.com/Fredericsonn/sirius-back.git"
         REMOTE_USER = "eco"
@@ -11,6 +11,7 @@ pipeline {
             }
         }
         stage("Build") {
+            agent { dockerContainer { image 'back-agent' } }
             steps {
                 script {    
                     sh '''
@@ -25,6 +26,12 @@ pipeline {
             }
         }
         stage("Building Docker Image") {
+            agent {
+                docker {
+                    image 'docker:cli'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             steps {
                 script {
                     sh 'docker build -t ${IMAGE_NAME} .'
@@ -32,6 +39,12 @@ pipeline {
             }
         }
         stage("Pushing Image to DockerHub") {
+            agent {
+                docker {
+                    image 'docker:cli'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
