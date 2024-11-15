@@ -1,36 +1,48 @@
 pipeline {
-    agent none
+    agent none  
     environment {
         REPO_URL = "https://github.com/Fredericsonn/sirius-back.git"
         REMOTE_USER = "eco"
     }
     stages {
         stage('Cloning the repository') {
+            agent { 
+                docker { 
+                    image 'ecotracer/back-agent' 
+                } 
+            }
             steps {
-                git branch : "master", url: "${env.REPO_URL}"
+                git branch: "master", url: "${env.REPO_URL}"
             }
         }
         stage("Build") {
-            agent { dockerContainer { image 'back-agent' } }
+            agent { 
+                docker { 
+                    image 'ecotracer/back-agent' 
+                } 
+            }
             steps {
                 script {    
-                    sh '''
-                        mvn clean package
-                    '''
+                    sh 'mvn clean package'
                 }
             }
         }
         stage("Archive artifact") {
+            agent { 
+                docker { 
+                    image 'ecotracer/back-agent' 
+                } 
+            }   
             steps {
-                archiveArtifacts artifacts : "target/*.jar, ./Dockerfile", allowEmptyArchive: false
+                archiveArtifacts artifacts: "target/*.jar,Dockerfile", allowEmptyArchive: false
             }
         }
         stage("Building Docker Image") {
-            agent {
-                docker {
-                    image 'docker:cli'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
+            agent { 
+                docker { 
+                    image 'ecotracer/dind' 
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+                } 
             }
             steps {
                 script {
@@ -38,12 +50,13 @@ pipeline {
                 }
             }
         }
+
         stage("Pushing Image to DockerHub") {
-            agent {
-                docker {
-                    image 'docker:cli'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
+            agent { 
+                docker { 
+                    image 'ecotracer/dind' 
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""' 
+                } 
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -55,11 +68,11 @@ pipeline {
             }
         }
         stage("Deploy to the back server") {
-            agent {
-                docker {
-                    image 'docker:cli'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
+            agent { 
+                docker { 
+                    image 'ecotracer/dind' 
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+                } 
             }
             steps {
                 sshagent(['backend']) { 
@@ -68,10 +81,8 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker rmi -f ${IMAGE_NAME} && docker run -d --name backend -p 8080:8080 -e DB=${DATABASE_URL} ${IMAGE_NAME}"
                     """
                 }
-                
             }
         }
-
     }
     post {
         success {
