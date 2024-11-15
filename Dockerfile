@@ -2,7 +2,7 @@ FROM openjdk:23-jdk
 
 WORKDIR /usr/src/app
 
-COPY ./*jar .
+COPY target/*jar .
 
 EXPOSE 8080
 
