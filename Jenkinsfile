@@ -18,7 +18,7 @@ pipeline {
         stage("Build") {
             agent { 
                 docker { 
-                    image 'ecotracer/back-agent' 
+                    image 'ecotracer/back-agent'
                 } 
             }
             steps {
@@ -46,12 +46,12 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'docker build -t ${IMAGE_NAME} .'
+                    sh 'docker build -t ${REGISTRY_URL}/${IMAGE_NAME} .'
                 }
             }
         }
 
-        stage("Pushing Image to DockerHub") {
+        stage("Pushing Image to the registry") {
             agent { 
                 docker { 
                     image 'ecotracer/dind' 
@@ -59,10 +59,10 @@ pipeline {
                 } 
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'registry', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
-                        docker login -u $USERNAME -p $PASSWORD
-                        docker push ${IMAGE_NAME}
+                        docker login ${REGISTRY_URL} -u $USERNAME -p $PASSWORD
+                        docker push ${REGISTRY_URL}/${IMAGE_NAME}
                     '''
                 }
             }
@@ -77,8 +77,8 @@ pipeline {
             steps {
                 sshagent(['backend']) { 
                     sh """
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "lsof -ti:8080 | xargs -r kill -9; docker rm -f backend"
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker rmi -f ${IMAGE_NAME} && docker run -d --name backend -p 8080:8080 -e DB=${DATABASE_URL} ${IMAGE_NAME}"
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker stop backend || true && docker rm backend || true"
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker rmi -f ${REGISTRY_URL}/${IMAGE_NAME} && docker run -d --name backend -p 8080:8080 -e DB=${DATABASE_URL} ${REGISTRY_URL}/${IMAGE_NAME}"
                     """
                 }
             }
