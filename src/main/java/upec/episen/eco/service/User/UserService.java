@@ -6,20 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import upec.episen.eco.exceptions.UserNotFoundException;
-import upec.episen.eco.models.User.User;
-import upec.episen.eco.repositories.User.IUser;
+import upec.episen.eco.models.User.Person;
+import upec.episen.eco.repositories.User.IPersonUser;
 import upec.episen.eco.service.ServiceHelper;
 
 @Service
 public class UserService {
 
     @Autowired
-    private IUser iuser;
+    private IPersonUser iuser;
 
     // find a user by its id
-    public User getUserById(Long id) throws UserNotFoundException {
+    public Person getUserById(Long id) throws UserNotFoundException {
 
-        Optional<User> user = iuser.findById(id);
+        Optional<Person> user = iuser.findById(id);
 
         if (user.isPresent()) return user.get();
 
@@ -29,7 +29,7 @@ public class UserService {
     // delete a user
     public void deleteUser(Long id) throws UserNotFoundException {
 
-        Optional<User> user = iuser.findById(id);
+        Optional<Person> user = iuser.findById(id);
 
         if (user.isPresent()) iuser.delete(user.get());
         
@@ -37,7 +37,7 @@ public class UserService {
     }
 
     // save a new user
-    public User saveUser(User user) {
+    public Person saveUser(Person user) {
         return iuser.save(user);
     }
 
@@ -46,7 +46,7 @@ public class UserService {
 
         try {
 
-            User user = getUserById(id);
+            Person user = getUserById(id);
 
             ServiceHelper.genericUpdate(user, updates);
 
