@@ -1,6 +1,8 @@
 package upec.episen.eco.controllers.User;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,26 +13,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import upec.episen.eco.models.User.Person;
-import upec.episen.eco.service.User.PersonUserService;
+import upec.episen.eco.models.User.Enterprise;
+import upec.episen.eco.service.User.EnterpriseUserService;
 
 @RestController
-@RequestMapping("/users/person")
-public class PersonController {
+@RequestMapping("/users/enterprise")
+public class EnterpriseController {
 
     @Autowired
-    private PersonUserService userservice;
+    private EnterpriseUserService userservice;
 
     // @Autowired
-    // private BCryptPasswordEncoder encoder;  // will be used later for authentication
+    // private BCryptPasswordEncoder encoder;   // will be used later for authentication
 
-    @GetMapping() 
-    public List<Person> getAllUsers() {
+    @GetMapping()
+    public List<Enterprise> getAllUsers() {
         return userservice.getAllUsers();
     }
-    
+
     @PostMapping("/post")
-    public ResponseEntity<?> postUser(@RequestBody Person user) {
+    public ResponseEntity<?> postUser(@RequestBody Enterprise user) {
         Map<String, Object> body = new HashMap<String, Object>();
         String msg;
         int status;
