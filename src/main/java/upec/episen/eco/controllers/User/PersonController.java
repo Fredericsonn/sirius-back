@@ -21,8 +21,8 @@ public class PersonController {
     @Autowired
     private PersonUserService userservice;
 
-    // @Autowired
-    // private BCryptPasswordEncoder encoder;  // will be used later for authentication
+    @Autowired
+    private BCryptPasswordEncoder encoder;  
 
     @GetMapping() 
     public List<Person> getAllUsers() {
@@ -35,7 +35,7 @@ public class PersonController {
         String msg;
         int status;
         try {
-            // user.setPassword(encoder.encode(user.getPassword()));
+            user.setPassword(encoder.encode(user.getPassword()));
             userservice.saveUser(user);
             msg = "User created successfully";
             status = 201;
