@@ -6,38 +6,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import upec.episen.eco.exceptions.UserNotFoundException;
+import upec.episen.eco.models.User.Enterprise;
 import upec.episen.eco.models.User.Person;
-import upec.episen.eco.repositories.User.IPersonUser;
+import upec.episen.eco.repositories.User.IEnterpriseUser;
 import upec.episen.eco.service.ServiceHelper;
 
 @Service
-public class UserService {
+public class EnterpriseUserService {
 
     @Autowired
-    private IPersonUser iuser;
+    private IEnterpriseUser iuser;
 
     // find a user by its id
-    public Person getUserById(Long id) throws UserNotFoundException {
+    public Enterprise getUserById(Long id) throws UserNotFoundException {
 
-        Optional<Person> user = iuser.findById(id);
+        Optional<Enterprise> user = iuser.findById(id);
 
-        if (user.isPresent()) return user.get();
+        if (user.isPresent())
+            return user.get();
 
         throw new UserNotFoundException(id);
+    }
+
+    // get all users
+    public List<Enterprise> getAllUsers() {
+        return iuser.findAll();
     }
 
     // delete a user
     public void deleteUser(Long id) throws UserNotFoundException {
 
-        Optional<Person> user = iuser.findById(id);
+        Optional<Enterprise> user = iuser.findById(id);
 
-        if (user.isPresent()) iuser.delete(user.get());
-        
+        if (user.isPresent())
+            iuser.delete(user.get());
+
         throw new UserNotFoundException(id);
     }
 
     // save a new user
-    public Person saveUser(Person user) {
+    public Enterprise saveUser(Enterprise user) {
         return iuser.save(user);
     }
 
@@ -46,7 +54,7 @@ public class UserService {
 
         try {
 
-            Person user = getUserById(id);
+            Enterprise user = getUserById(id);
 
             ServiceHelper.genericUpdate(user, updates);
 
@@ -60,4 +68,5 @@ public class UserService {
         }
 
     }
+
 }
