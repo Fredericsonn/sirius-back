@@ -1,36 +1,41 @@
 package upec.episen.eco.models.machine;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.PrimaryKeyJoinColumns;
+import jakarta.persistence.*;
 import upec.episen.eco.models.machine.enums.Resource;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
 import java.util.ArrayList;
 
 
-class Machine {
-    @PrimaryKeyJoinColumn
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Machine {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column
+
     private String name;
-    @Column
+
     private double defaultFootpring;
-    @Column
+
+    @Enumerated(EnumType.STRING)
     private UsageCategory usage;
 
+    @ElementCollection
     private ArrayList<Resource> resources;
 
-    public Machine(){}
+    public Machine() {}
 
-    public Machine(int id,String name,double f,UsageCategory us,ArrayList<Resource> r){
-        this.id=id;
-        this.name=name;
-        this.defaultFootpring=f;
-        this.usage=us;
-        this.resources=r;
+    public Machine(int id, String name, double f, UsageCategory us, ArrayList<Resource> r) {
+        this.id = id;
+        this.name = name;
+        this.defaultFootpring = f;
+        this.usage = us;
+        this.resources = r;
     }
+
+    // Getters and setters
 
     public int getId() {
         return id;
