@@ -12,7 +12,7 @@ pipeline {
                 } 
             }
             steps {
-                git branch: ${BRANCH}, url: "${env.REPO_URL}"
+                git branch: "${BRANCH}", url: "${env.REPO_URL}"
             }
         }
         stage("Build") {
