@@ -1,4 +1,4 @@
-package upec.episen.eco.models.Comsumption;
+package upec.episen.eco.models.consumption;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

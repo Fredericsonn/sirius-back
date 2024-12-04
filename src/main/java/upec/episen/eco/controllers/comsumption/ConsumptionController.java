@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import upec.episen.eco.models.Comsumption.ComsumptionModel;
-import upec.episen.eco.service.comsumption.ComsumptionService;
+
+import upec.episen.eco.models.consumption.ComsumptionModel;
+import upec.episen.eco.service.consumption.ComsumptionService;
 
 import java.util.List;
 

@@ -11,9 +11,11 @@ import java.util.ArrayList;
 @Entity
 public class Vehicle extends Machine {
 
+    @Column(name = "vehicle_size")
     @Enumerated(EnumType.STRING)
     private VehicleSize size;
 
+    @Column(name = "vehicle_type")
     @Enumerated(EnumType.STRING)
     private VehicleType type;
 

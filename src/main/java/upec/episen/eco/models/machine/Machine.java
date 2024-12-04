@@ -7,26 +7,27 @@ import upec.episen.eco.models.machine.enums.UsageCategory;
 import java.util.ArrayList;
 
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@MappedSuperclass
 public abstract class Machine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @Column
     private String name;
 
+    @Column(name="default_footprint")
     private double defaultFootpring;
 
+    @Column
     @Enumerated(EnumType.STRING)
     private UsageCategory usage;
 
     @ElementCollection
     private ArrayList<Resource> resources;
 
-    public Machine() {}
-
+    
     public Machine(int id, String name, double f, UsageCategory us, ArrayList<Resource> r) {
         this.id = id;
         this.name = name;
@@ -34,7 +35,9 @@ public abstract class Machine {
         this.usage = us;
         this.resources = r;
     }
-
+    
+    public Machine() {}
+    
     // Getters and setters
 
     public int getId() {

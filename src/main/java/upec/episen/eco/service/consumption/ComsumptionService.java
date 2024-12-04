@@ -1,8 +1,9 @@
-package upec.episen.eco.service.comsumption;
+package upec.episen.eco.service.consumption;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import upec.episen.eco.models.Comsumption.ComsumptionModel;
+
+import upec.episen.eco.models.consumption.ComsumptionModel;
 import upec.episen.eco.repositories.comsumption.Comsumption;
 
 import java.util.List;
