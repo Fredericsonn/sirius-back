@@ -1,17 +1,24 @@
 package upec.episen.eco.models.machine;
 
-import jakarta.persistence.*;
+import java.util.ArrayList;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import upec.episen.eco.models.machine.enums.Resource;
 import upec.episen.eco.models.machine.enums.UsageCategory;
-
-import java.util.ArrayList;
 
 
 @MappedSuperclass
 public abstract class Machine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
