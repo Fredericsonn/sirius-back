@@ -1,12 +1,12 @@
 package upec.episen.eco.models.consumption;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
 
 
 @Entity
-public class ComsumptionModel {
+public class Comsumption {
     @Id
     private long id;
     @Column
@@ -14,13 +14,13 @@ public class ComsumptionModel {
     @Column
     private double totalCarbonEmitted;
 
-    public ComsumptionModel(long id, String name, double totalCarbonEmitted) {
+    public Comsumption(long id, String name, double totalCarbonEmitted) {
         this.id = id;
         this.name = name;
         this.totalCarbonEmitted = totalCarbonEmitted;
     }
 
-    public ComsumptionModel() {}
+    public Comsumption() {}
 
     public long getId() {
         return id;
