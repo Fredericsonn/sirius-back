@@ -1,20 +1,21 @@
 package upec.episen.eco.service.consumption;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import upec.episen.eco.models.consumption.ComsumptionModel;
-import upec.episen.eco.repositories.comsumption.Comsumption;
-
-import java.util.List;
+import upec.episen.eco.models.consumption.Comsumption;
+import upec.episen.eco.repositories.comsumption.IComsumption;
 
 @Service
 public class ComsumptionService {
+    
     @Autowired
-    Comsumption consumptiondao;
+    private IComsumption consumptionrepo;
 
-    public List<ComsumptionModel> getAll(){
-        return consumptiondao.findAll();
+    public List<Comsumption> getAll(){
+        return consumptionrepo.findAll();
 
     }
 

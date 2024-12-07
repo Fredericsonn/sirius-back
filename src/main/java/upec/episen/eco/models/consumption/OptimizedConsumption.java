@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-@Entity
+@Entity(name="optimized_consumption")
 public class OptimizedConsumption {
     @Id
     private long id;
