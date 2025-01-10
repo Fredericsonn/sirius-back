@@ -19,8 +19,8 @@ public class Vehicle extends Machine {
     @Enumerated(EnumType.STRING)
     private VehicleType type;
 
-    public Vehicle(int id, String name, double f, UsageCategory us, ArrayList<Resource> r, VehicleSize size, VehicleType type) {
-        super(id, name, f, us, r);
+    public Vehicle(int id, String name, double f, UsageCategory us, String img, ArrayList<Resource> r, VehicleSize size, VehicleType type) {
+        super(id, name, f, us, img, r);
         this.size = size;
         this.type = type;
     }

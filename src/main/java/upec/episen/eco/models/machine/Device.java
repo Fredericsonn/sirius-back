@@ -14,8 +14,8 @@ public class Device extends Machine {
     @Column
     private double power;
 
-    public Device(int id, String name, double f, UsageCategory us, ArrayList<Resource> r, double p) {
-        super(id, name, f, us, r);
+    public Device(int id, String name, double f, UsageCategory us, String img, ArrayList<Resource> r, double p) {
+        super(id, name, f, us, img, r);
         this.power = p;
     }
 

@@ -1,6 +1,7 @@
 package upec.episen.eco.models.machine;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -31,15 +32,19 @@ public abstract class Machine {
     @Enumerated(EnumType.STRING)
     private UsageCategory usage;
 
+    @Column
+    private String img;
+
     @ElementCollection
-    private ArrayList<Resource> resources;
+    private List<Resource> resources;
 
     
-    public Machine(int id, String name, double f, UsageCategory us, ArrayList<Resource> r) {
+    public Machine(int id, String name, double f, UsageCategory us, String img, List<Resource> r) {
         this.id = id;
         this.name = name;
         this.defaultFootpring = f;
         this.usage = us;
+        this.img = img;
         this.resources = r;
     }
     
@@ -79,12 +84,20 @@ public abstract class Machine {
         this.usage = usage;
     }
 
-    public ArrayList<Resource> getResources() {
+    public List<Resource> getResources() {
         return resources;
     }
 
-    public void setResources(ArrayList<Resource> resources) {
+    public void setResources(List<Resource> resources) {
         this.resources = resources;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     @Override
@@ -94,7 +107,11 @@ public abstract class Machine {
                 ", name='" + name + '\'' +
                 ", defaultFootpring=" + defaultFootpring +
                 ", usage=" + usage +
+                ", img=" + img + 
                 ", resources=" + resources +
                 '}';
     }
+
+
+
 }

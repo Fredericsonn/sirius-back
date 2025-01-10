@@ -11,7 +11,7 @@ import upec.episen.eco.models.consumption.Comsumption;
 import upec.episen.eco.service.consumption.ComsumptionService;
 
 @RestController
-@RequestMapping("/consumption/consumption")
+@RequestMapping("/consumptions")
 public class ConsumptionController {
 
     @Autowired
@@ -21,5 +21,4 @@ public class ConsumptionController {
     public List<Comsumption> consumption() {
         return  consumptionService.getAll();
     }
-
 }
