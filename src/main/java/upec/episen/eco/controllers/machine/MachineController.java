@@ -1,10 +1,11 @@
 package upec.episen.eco.controllers.machine;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class MachineController {
         Map<String, Object> body = new HashMap<String, Object>();
         List<Device> devices = machineservice.getAllDevices();
         List<Vehicle> vehicles = machineservice.getAllVehicles();
+        System.out.println(vehicles);
 
         body.put("devices", devices);
         body.put("vehicles", vehicles);
