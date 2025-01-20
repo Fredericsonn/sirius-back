@@ -3,6 +3,7 @@ package upec.episen.eco.models.consumption;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity(name="consumption_item")
 public class ComsumptionItem {
@@ -19,6 +20,9 @@ public class ComsumptionItem {
     @Column
     private double carbonFootprint;
 
+    @ManyToOne
+    private Comsumption comsumption;
+
     public ComsumptionItem(long id, double usageFrequency, long quatity, double carbonFootprint) {
         this.id = id;
         this.usageFrequency = usageFrequency;
@@ -26,10 +30,16 @@ public class ComsumptionItem {
         this.carbonFootprint = carbonFootprint;
     }
 
-    public ComsumptionItem() {
+    public ComsumptionItem() {}
 
+    // Ajouter cette méthode getter pour accéder à l'entité Comsumption
+    public Comsumption getConsumption() {
+        return comsumption;
     }
 
+    public void setConsumption(Comsumption consumption) {
+        this.comsumption = consumption;
+    }
 
     public long getId() {
         return id;
