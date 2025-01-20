@@ -17,13 +17,5 @@ public class ConsumptionController {
     @Autowired
     ComsumptionService consumptionService;
 
-<<<<<<< HEAD
-    @GetMapping("/allConsommations")
-    public List<Comsumption> consumption() {
-        return  consumptionService.getAll();
-    }
-=======
 
-
->>>>>>> f3f15df (select by)
 }

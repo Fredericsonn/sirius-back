@@ -12,6 +12,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import upec.episen.eco.models.Collection.Collection;
 import upec.episen.eco.models.machine.enums.Resource;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
@@ -39,6 +42,10 @@ public abstract class Machine {
 
     @ElementCollection
     private List<Resource> resources;
+
+    @ManyToOne
+    @JoinColumn(name = "collection_id", nullable = false)
+    private Collection collection;
 
     
     public Machine(int id, String name, double f, UsageCategory us, String img, List<Resource> r) {

@@ -1,10 +1,7 @@
 package upec.episen.eco.models.consumption;
 
-<<<<<<< HEAD
 import java.time.LocalDate;
-=======
 import java.util.Set;
->>>>>>> f3f15df (select by)
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,13 +21,10 @@ public class Comsumption {
     @Column
     private double totalCarbonEmitted;
 
-<<<<<<< HEAD
     @Column
     private LocalDate createdAt;
-=======
     @OneToMany(mappedBy = "comsumption")
     private Set<ComsumptionItem> ComsumptionItem;
->>>>>>> f3f15df (select by)
 
     public Comsumption(long id, String name, double totalCarbonEmitted) {
         this.id = id;
