@@ -1,12 +1,11 @@
 package upec.episen.eco.models.machine;
 
-import java.util.ArrayList;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import upec.episen.eco.models.machine.enums.Resource;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Device extends Machine {
@@ -14,13 +13,19 @@ public class Device extends Machine {
     @Column
     private double power;
 
-    public Device(int id, String name, double f, UsageCategory us, ArrayList<Resource> r, double p) {
-        super(id, name, f, us, r);
-        this.power = p;
+    // No-argument constructor
+    public Device() {
+        super();
     }
 
-    public Device() {}
+    // Constructor without footprint
+    public Device(String name, UsageCategory usage, double footprint, Set<Component> resources, double power) {
+        super(name, footprint, usage, resources);
+        this.power = power;
+    }
 
+
+    // Getters and Setters
     public double getPower() {
         return power;
     }

@@ -1,20 +1,14 @@
 package upec.episen.eco.models.machine;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import upec.episen.eco.models.machine.enums.Resource;
+import jakarta.persistence.*;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
-
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Machine {
 
     @Id
@@ -24,29 +18,29 @@ public abstract class Machine {
     @Column
     private String name;
 
-    @Column(name="default_footprint")
-    private double defaultFootpring;
+    @Column(name = "default_footprint")
+    private double defaultFootprint;
 
     @Column
     @Enumerated(EnumType.STRING)
     private UsageCategory usage;
 
-    @ElementCollection
-    private ArrayList<Resource> resources;
+    @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Component> resources;
 
-    
-    public Machine(int id, String name, double f, UsageCategory us, ArrayList<Resource> r) {
-        this.id = id;
+
+    // Full constructor
+    protected Machine(String name, double footprint, UsageCategory usage, Set<Component> resources) {
         this.name = name;
-        this.defaultFootpring = f;
-        this.usage = us;
-        this.resources = r;
+        this.defaultFootprint = footprint;
+        this.usage = usage;
+        this.resources = resources;
     }
-    
-    public Machine() {}
-    
-    // Getters and setters
 
+    public Machine() {
+    }
+
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -63,12 +57,12 @@ public abstract class Machine {
         this.name = name;
     }
 
-    public double getDefaultFootpring() {
-        return defaultFootpring;
+    public double getDefaultFootprint() {
+        return defaultFootprint;
     }
 
-    public void setDefaultFootpring(double defaultFootpring) {
-        this.defaultFootpring = defaultFootpring;
+    public void setDefaultFootprint(double defaultFootprint) {
+        this.defaultFootprint = defaultFootprint;
     }
 
     public UsageCategory getUsage() {
@@ -79,11 +73,11 @@ public abstract class Machine {
         this.usage = usage;
     }
 
-    public ArrayList<Resource> getResources() {
+    public Set<Component> getResources() {
         return resources;
     }
 
-    public void setResources(ArrayList<Resource> resources) {
+    public void setResources(Set<Component> resources) {
         this.resources = resources;
     }
 
@@ -92,7 +86,7 @@ public abstract class Machine {
         return "Machine{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", defaultFootpring=" + defaultFootpring +
+                ", defaultFootprint=" + defaultFootprint +
                 ", usage=" + usage +
                 ", resources=" + resources +
                 '}';

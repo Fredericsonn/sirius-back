@@ -1,12 +1,12 @@
 package upec.episen.eco.models.machine;
 
 import jakarta.persistence.*;
-import upec.episen.eco.models.machine.enums.Resource;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 import upec.episen.eco.models.machine.enums.VehicleSize;
 import upec.episen.eco.models.machine.enums.VehicleType;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Vehicle extends Machine {
@@ -19,14 +19,19 @@ public class Vehicle extends Machine {
     @Enumerated(EnumType.STRING)
     private VehicleType type;
 
-    public Vehicle(int id, String name, double f, UsageCategory us, ArrayList<Resource> r, VehicleSize size, VehicleType type) {
-        super(id, name, f, us, r);
+    // No-argument constructor
+    public Vehicle() {
+        super();
+    }
+
+    // Full constructor
+    public Vehicle(String name, UsageCategory usage, Set<Component> resources, VehicleSize size, VehicleType type) {
+        super(name,  88,usage, resources);
         this.size = size;
         this.type = type;
     }
 
-    public Vehicle() {}
-
+    // Getters and Setters
     public VehicleSize getSize() {
         return size;
     }
