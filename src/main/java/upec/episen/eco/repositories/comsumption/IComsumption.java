@@ -11,5 +11,5 @@ import upec.episen.eco.models.consumption.ComsumptionItem;
 
 @Repository
 public interface IComsumption extends JpaRepository<Comsumption,Long> {
-    @Query("SELECT ci FROM ComsumptionItem ci WHERE ci.comsumption.id = :comsumptionId " + "ORDER BY ci.carbonFootprint / ci.quantity DESC")
-    List<ComsumptionItem> findOrderedItemsByComsumptionId(Long comsumptionId);}
+    @Query("SELECT ci FROM consumption_item ci WHERE ci.comsumption.id = :comsumptionId " + "ORDER BY ci.carbonFootprint / ci.quatity DESC")
+    List<ComsumptionItem> getOrderedItemsById(Long comsumptionId);}

@@ -28,9 +28,9 @@ public class ComsumptionService {
                 .orElseThrow(() -> new RuntimeException("Consumption not found"));
     }
 
-    public List<ComsumptionItem> getOrderedItemsByComsumption(Long id){
-        return comsumptionRepository.findOrderedItemsByComsumptionId(id);
+    public List<ComsumptionItem> getOrderedItemsById(Long id){
+        return comsumptionRepository.getOrderedItemsById(id);
     }
 
-    
+
 }
