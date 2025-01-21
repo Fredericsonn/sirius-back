@@ -4,25 +4,29 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-@Entity
-public class ComsumptionItem {
+@Entity(name="consumption_item")
+public class ConsumptionItem {
+
     @Id
     private long id;
+
     @Column
     private double usageFrequency;
+
     @Column
     private long quatity;
+
     @Column
     private double carbonFootprint;
 
-    public ComsumptionItem(long id, double usageFrequency, long quatity, double carbonFootprint) {
+    public ConsumptionItem(long id, double usageFrequency, long quatity, double carbonFootprint) {
         this.id = id;
         this.usageFrequency = usageFrequency;
         this.quatity = quatity;
         this.carbonFootprint = carbonFootprint;
     }
 
-    public ComsumptionItem() {
+    public ConsumptionItem() {
 
     }
 

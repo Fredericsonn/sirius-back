@@ -1,43 +1,62 @@
 package upec.episen.eco.models.machine;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.machine.enums.Resource;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
-import java.util.ArrayList;
-
-
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Machine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     @Column
     private String name;
 
-    @Column(name="default_footprint")
+    @Column(name = "default_footprint")
     private double defaultFootpring;
 
     @Column
     @Enumerated(EnumType.STRING)
     private UsageCategory usage;
 
-    @ElementCollection
-    private ArrayList<Resource> resources;
+    @Column
+    private String img;
 
-    
-    public Machine(int id, String name, double f, UsageCategory us, ArrayList<Resource> r) {
+    @ElementCollection
+    private List<Resource> resources;
+
+    @ManyToOne
+    private Collection collection;
+
+    public Machine(int id, String name, double f, UsageCategory us, String img, List<Resource> r) {
         this.id = id;
         this.name = name;
         this.defaultFootpring = f;
         this.usage = us;
+        this.img = img;
         this.resources = r;
     }
-    
-    public Machine() {}
-    
+
+    public Machine() {
+    }
+
     // Getters and setters
 
     public int getId() {
@@ -72,12 +91,20 @@ public abstract class Machine {
         this.usage = usage;
     }
 
-    public ArrayList<Resource> getResources() {
+    public List<Resource> getResources() {
         return resources;
     }
 
-    public void setResources(ArrayList<Resource> resources) {
+    public void setResources(List<Resource> resources) {
         this.resources = resources;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     @Override
@@ -87,7 +114,9 @@ public abstract class Machine {
                 ", name='" + name + '\'' +
                 ", defaultFootpring=" + defaultFootpring +
                 ", usage=" + usage +
+                ", img=" + img +
                 ", resources=" + resources +
                 '}';
     }
+
 }
