@@ -3,6 +3,7 @@ package upec.episen.eco.models.consumption;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity(name="consumption_item")
@@ -21,6 +22,7 @@ public class ComsumptionItem {
     private double carbonFootprint;
 
     @ManyToOne
+    @JoinColumn(name = "consumption_id", nullable = false)
     private Comsumption comsumption;
 
     public ComsumptionItem(long id, double usageFrequency, long quatity, double carbonFootprint) {

@@ -45,7 +45,7 @@ public abstract class Machine {
 
     @ManyToOne
     @JoinColumn(name = "collection_id", nullable = false)
-    private Collection collection;
+    private Collection collectionList;
 
     
     public Machine(int id, String name, double f, UsageCategory us, String img, List<Resource> r) {
