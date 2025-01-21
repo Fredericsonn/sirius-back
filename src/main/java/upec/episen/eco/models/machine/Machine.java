@@ -12,12 +12,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.machine.enums.Resource;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
-
 @Entity
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Machine {
 
     @Id
@@ -27,7 +29,7 @@ public abstract class Machine {
     @Column
     private String name;
 
-    @Column(name="default_footprint")
+    @Column(name = "default_footprint")
     private double defaultFootpring;
 
     @Column
@@ -40,7 +42,9 @@ public abstract class Machine {
     @ElementCollection
     private List<Resource> resources;
 
-    
+    @ManyToOne
+    private Collection collection;
+
     public Machine(int id, String name, double f, UsageCategory us, String img, List<Resource> r) {
         this.id = id;
         this.name = name;
@@ -49,9 +53,10 @@ public abstract class Machine {
         this.img = img;
         this.resources = r;
     }
-    
-    public Machine() {}
-    
+
+    public Machine() {
+    }
+
     // Getters and setters
 
     public int getId() {
@@ -109,11 +114,9 @@ public abstract class Machine {
                 ", name='" + name + '\'' +
                 ", defaultFootpring=" + defaultFootpring +
                 ", usage=" + usage +
-                ", img=" + img + 
+                ", img=" + img +
                 ", resources=" + resources +
                 '}';
     }
-
-
 
 }

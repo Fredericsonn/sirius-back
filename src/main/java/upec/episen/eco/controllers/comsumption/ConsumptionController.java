@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import upec.episen.eco.models.consumption.Comsumption;
-import upec.episen.eco.service.consumption.ComsumptionService;
+import upec.episen.eco.models.consumption.Consumption;
+import upec.episen.eco.service.consumption.ConsumptionService;
 
 @RestController
 @RequestMapping("/consumptions")
 public class ConsumptionController {
 
     @Autowired
-    ComsumptionService consumptionService;
+    ConsumptionService consumptionService;
 
     @GetMapping("/allConsommations")
-    public List<Comsumption> consumption() {
+    public List<Consumption> consumption() {
         return  consumptionService.getAll();
     }
 }

@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 
 
 @Entity
-public class Comsumption {
+public class Consumption {
 
     @Id
     private long id;
@@ -22,14 +22,14 @@ public class Comsumption {
     @Column
     private LocalDate createdAt;
 
-    public Comsumption(long id, String name, double totalCarbonEmitted) {
+    public Consumption(long id, String name, double totalCarbonEmitted) {
         this.id = id;
         this.name = name;
         this.totalCarbonEmitted = totalCarbonEmitted;
         this.createdAt = LocalDate.now();
     }
 
-    public Comsumption() {}
+    public Consumption() {}
 
     public long getId() {
         return id;

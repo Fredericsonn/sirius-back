@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity(name="consumption_item")
-public class ComsumptionItem {
+public class ConsumptionItem {
 
     @Id
     private long id;
@@ -19,14 +19,14 @@ public class ComsumptionItem {
     @Column
     private double carbonFootprint;
 
-    public ComsumptionItem(long id, double usageFrequency, long quatity, double carbonFootprint) {
+    public ConsumptionItem(long id, double usageFrequency, long quatity, double carbonFootprint) {
         this.id = id;
         this.usageFrequency = usageFrequency;
         this.quatity = quatity;
         this.carbonFootprint = carbonFootprint;
     }
 
-    public ComsumptionItem() {
+    public ConsumptionItem() {
 
     }
 
