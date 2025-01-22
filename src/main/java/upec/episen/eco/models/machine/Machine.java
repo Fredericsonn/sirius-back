@@ -1,16 +1,16 @@
 package upec.episen.eco.models.machine;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Machine {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -25,9 +25,9 @@ public abstract class Machine {
     @Enumerated(EnumType.STRING)
     private UsageCategory usage;
 
-    @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Component> resources;
-
+    @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference // Add this annotation
+    private Set<Component> resources = new HashSet<>();
 
     // Full constructor
     protected Machine(String name, double footprint, UsageCategory usage, Set<Component> resources) {
@@ -38,6 +38,15 @@ public abstract class Machine {
     }
 
     public Machine() {
+    }
+    public void addResource(Component component) {
+        resources.add(component);
+        component.setMachine(this);
+    }
+
+    public void removeResource(Component component) {
+        resources.remove(component);
+        component.setMachine(null);
     }
 
     // Getters and Setters

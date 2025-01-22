@@ -1,5 +1,6 @@
 package upec.episen.eco.models.machine;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,15 +11,29 @@ public class Matter {
 
     @Column
     private String value;
+
     @Column
     private double volume;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference // Add this annotation
     private Component component;
+
+    // Constructeur par défaut nécessaire pour JPA
+    public Matter() {}
 
     public Matter(String value, double volume) {
         this.value = value;
         this.volume = volume;
+    }
+
+    // Getters et Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getValue() {
@@ -37,10 +52,19 @@ public class Matter {
         this.volume = volume;
     }
 
+    public Component getComponent() {
+        return component;
+    }
+
+    public void setComponent(Component component) {
+        this.component = component;
+    }
+
     @Override
     public String toString() {
         return "Matter{" +
-                "value=" + value +
+                "id=" + id +
+                ", value='" + value + '\'' +
                 ", volume=" + volume +
                 '}';
     }

@@ -10,6 +10,7 @@ import upec.episen.eco.models.machine.enums.VehicleType;
 import upec.episen.eco.repositories.machine.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -122,12 +123,65 @@ public class MachineService {
         return vehicleRepository.findByUsage(usage);
     }
 
-    public Machine saveMachine(Machine machine) {
+    /*public List<Machine> saveMachines(List<? extends Machine> machines) {
+        List<Machine> savedMachines = new ArrayList<>();
+        for (Machine machine : machines) {
+            if (machine instanceof Device) {
+                machine = (Device) machine;
+            } else if (machine instanceof Vehicle) {
+                machine = (Vehicle) machine;
+            }
+            savedMachines.add(imachine.save(machine));
+        }
+        return savedMachines;
+    }*/
+    /*public List<Machine> saveMachines(List<? extends Machine> machines) {
+        List<Machine> savedMachines = new ArrayList<>();
+        for (Machine machine : machines) {
+            // Ensure proper bidirectional relationship
+            if (machine.getResources() != null) {
+                for (Component component : machine.getResources()) {
+                    component.setMachine(machine);
+                }
+            }
 
-        if (machine instanceof Device) machine = (Device) machine;
-        else machine = (Vehicle) machine;
+            if (machine instanceof Device) {
+                machine = deviceRepository.save((Device) machine);
+            } else if (machine instanceof Vehicle) {
+                machine = vehicleRepository.save((Vehicle) machine);
+            }
+            savedMachines.add(machine);
+        }
+        return savedMachines;
+    }*/
+    public List<Machine> saveMachines(List<? extends Machine> machines) {
+        List<Machine> savedMachines = new ArrayList<>();
+        for (Machine machine : machines) {
+            if (machine.getResources() != null) {
+                Set<Component> components = new HashSet<>(machine.getResources());
+                machine.getResources().clear();
 
-        return imachine.save(machine);
+                for (Component component : components) {
+                    component.setMachine(machine);
+
+                    // Gérer les matters
+                    if (component.getMatters() != null) {
+                        Set<Matter> matters = new HashSet<>(component.getMatters());
+                        component.getMatters().clear();
+
+                        for (Matter matter : matters) {
+                            component.addMatter(matter);
+                        }
+                    }
+
+                    machine.getResources().add(component);
+                }
+            }
+
+            Machine savedMachine = imachine.save(machine);
+            savedMachines.add(savedMachine);
+        }
+        return savedMachines;
     }
     public List<Machine> getAllMachines() {
         return imachine.findAll();

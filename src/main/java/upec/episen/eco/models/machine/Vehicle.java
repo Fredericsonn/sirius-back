@@ -11,6 +11,9 @@ import java.util.Set;
 @Entity
 public class Vehicle extends Machine {
 
+    @Column
+    private String name;
+
     @Column(name = "vehicle_size")
     @Enumerated(EnumType.STRING)
     private VehicleSize size;
@@ -25,10 +28,10 @@ public class Vehicle extends Machine {
     }
 
     // Full constructor
-    public Vehicle(String name, UsageCategory usage, Set<Component> resources, VehicleSize size, VehicleType type) {
-        super(name,  88,usage, resources);
-        this.size = size;
-        this.type = type;
+    public Vehicle(String name, UsageCategory usage, double footprint, Set<Component> resources,VehicleSize vehicleSize, VehicleType vehicleType) {
+        super(name, footprint,usage,resources);
+        this.size = vehicleSize;
+        this.type = vehicleType;
     }
 
     // Getters and Setters

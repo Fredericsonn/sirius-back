@@ -1,10 +1,10 @@
 package upec.episen.eco.models.machine;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 
 @Entity
@@ -17,24 +17,31 @@ public class Component {
     private String name;
 
     @OneToMany(mappedBy = "component", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Matter> matters;
+    @JsonManagedReference // Add this annotation
+    private Set<Matter> matters = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "machine_id")
+    @JsonBackReference // Add this annotation
     private Machine machine;
 
-    public Component() {}
 
+    public Component() {
+        this.matters = new HashSet<>();
+    }
 
-    public Component(String name, Set<Matter> matters) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Component name cannot be null or empty");
-        }
-        if (matters == null) {
-            throw new IllegalArgumentException("Matters list cannot be null");
-        }
+    public Component(String name) {
         this.name = name;
-        this.matters =matters;
+        this.matters = new HashSet<>();
+    }
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -42,35 +49,31 @@ public class Component {
     }
 
     public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Component name cannot be null or empty");
-        }
         this.name = name;
     }
 
-
-        public void setMatters(Set<Matter> matters) {
-        if (matters == null) {
-            throw new IllegalArgumentException("Matters list cannot be null");
-        }
-        this.matters = matters;
+    public Set<Matter> getMatters() {
+        return matters;
     }
 
+    public void setMatters(Set<Matter> matters) {
+        this.matters.clear();
+        if (matters != null) {
+            matters.forEach(this::addMatter);
+        }
+    }
 
     public void addMatter(Matter matter) {
-        if (matter == null) {
-            throw new IllegalArgumentException("Matter cannot be null");
-        }
         matters.add(matter);
+        matter.setComponent(this);
     }
 
-
-    public boolean removeMatter(Matter matter) {
-        return matters.remove(matter);
+    public Machine getMachine() {
+        return machine;
     }
 
-    public Long getId() {
-        return id;
+    public void setMachine(Machine machine) {
+        this.machine = machine;
     }
 
     @Override

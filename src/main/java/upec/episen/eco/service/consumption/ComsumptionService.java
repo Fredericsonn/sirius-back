@@ -9,7 +9,7 @@ import upec.episen.eco.models.consumption.Comsumption;
 import upec.episen.eco.repositories.comsumption.IComsumption;
 
 @Service
-public class ComsumptionService {
+public class  ComsumptionService {
     
     @Autowired
     private IComsumption consumptionrepo;
