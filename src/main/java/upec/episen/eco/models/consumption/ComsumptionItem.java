@@ -13,19 +13,19 @@ public class ComsumptionItem {
     private long id;
 
     @Column
-    private double usageFrequency;
+    private Double usageFrequency;
 
     @Column
     private long quatity;
 
     @Column
-    private double carbonFootprint;
+    private Double carbonFootprint;
 
     @ManyToOne
     @JoinColumn(name = "consumption_id", nullable = false)
     private Comsumption comsumption;
 
-    public ComsumptionItem(long id, double usageFrequency, long quatity, double carbonFootprint) {
+    public ComsumptionItem(long id, Double usageFrequency, long quatity, Double carbonFootprint) {
         this.id = id;
         this.usageFrequency = usageFrequency;
         this.quatity = quatity;
@@ -51,11 +51,11 @@ public class ComsumptionItem {
         this.id = id;
     }
 
-    public double getUsageFrequency() {
+    public Double getUsageFrequency() {
         return usageFrequency;
     }
 
-    public void setUsageFrequency(double usageFrequency) {
+    public void setUsageFrequency(Double usageFrequency) {
         this.usageFrequency = usageFrequency;
     }
 
@@ -67,11 +67,11 @@ public class ComsumptionItem {
         this.quatity = quatity;
     }
 
-    public double getCarbonFootprint() {
+    public Double getCarbonFootprint() {
         return carbonFootprint;
     }
 
-    public void setCarbonFootprint(double carbonFootprint) {
+    public void setCarbonFootprint(Double carbonFootprint) {
         this.carbonFootprint = carbonFootprint;
     }
 
