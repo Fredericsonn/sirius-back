@@ -2,7 +2,15 @@ package upec.episen.eco.models.User;
 
 import java.util.Set;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import upec.episen.eco.models.machine.Machine;
 
 @Entity
@@ -15,7 +23,7 @@ public class Collection {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(cascade=CascadeType.ALL)
     private Set<Machine> machines;
 
     @ManyToOne(optional = false)

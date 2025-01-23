@@ -1,6 +1,10 @@
 package upec.episen.eco.models.machine;
 
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -12,18 +16,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.machine.enums.Resource;
 import upec.episen.eco.models.machine.enums.UsageCategory;
+
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = Device.class, name = "Device"),
+    @JsonSubTypes.Type(value = Vehicle.class, name = "Vehicle")
+})
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Machine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
@@ -42,8 +55,8 @@ public abstract class Machine {
     @ElementCollection
     private List<Resource> resources;
 
-    @ManyToOne
-    private Collection collection;
+    @ManyToMany(mappedBy="machines")
+    private Set<Collection> collection;
 
     public Machine(int id, String name, double f, UsageCategory us, String img, List<Resource> r) {
         this.id = id;

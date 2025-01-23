@@ -11,4 +11,6 @@ public interface ICollection extends JpaRepository<Collection, Long> {
 
     List<Collection> findAllByUser(User user);
 
+    Collection findByUserAndName(User user, String name);
+
 }

@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import upec.episen.eco.exceptions.CollectionNotFoundException;
 import upec.episen.eco.exceptions.UserNotFoundException;
+import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.User.Enterprise;
 import upec.episen.eco.models.User.Person;
 import upec.episen.eco.models.User.User;
+import upec.episen.eco.service.User.CollectionService;
 import upec.episen.eco.service.User.UserService;
 
 @RestController
@@ -29,6 +32,9 @@ public class UserController {
 
     @Autowired
     private UserService userservice;
+
+    @Autowired
+    private CollectionService collectionservice;
 
     @Autowired
     private DelegatingPasswordEncoder encoder;
@@ -51,6 +57,20 @@ public class UserController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @GetMapping("/collections")
+    public List<Collection> getAllCollections(@RequestParam(name="user", required=false) Long userId) throws UserNotFoundException {
+
+        if (userId != null) return collectionservice.getAllCollectionsByUser(userId);
+
+        return collectionservice.getAllCollections();
+    }
+
+    @GetMapping("/collections/{name}")
+    public Collection getCollectionByName(@PathVariable String name, @RequestParam(name="userId", required=true) Long userId) throws UserNotFoundException {
+        System.out.println(collectionservice.getCollectionByUserAndName(userId, name));
+        return collectionservice.getCollectionByUserAndName(userId, name);
     }
 
     @PostMapping("/person/post")
@@ -95,6 +115,10 @@ public class UserController {
         return ResponseEntity.status(status).body(body);
     }
 
+    @PostMapping("/collections/post")
+    public Collection postCollection(@RequestBody Collection collection) {
+        return collectionservice.saveCollection(collection);
+    }
     @PutMapping("/put/{id}")
     public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody Map<String, Object> updates) {
         Map<String, Object> body = new HashMap<String, Object>();

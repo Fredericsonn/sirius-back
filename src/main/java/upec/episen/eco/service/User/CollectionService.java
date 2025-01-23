@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import upec.episen.eco.exceptions.CollectionNotFoundException;
+import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.User.User;
 import upec.episen.eco.models.machine.Machine;
 import upec.episen.eco.repositories.User.ICollection;
+import upec.episen.eco.repositories.User.IUser;
 
 @Service
 public class CollectionService {
@@ -19,12 +21,27 @@ public class CollectionService {
     @Autowired
     private ICollection icollection;
 
+    @Autowired
+    private IUser iuser;
+
     public List<Collection> getAllCollections() {
         return icollection.findAll();
     }
 
-    public List<Collection> getAllCollectionsByUser(User user) {
-        return icollection.findAllByUser(user);
+    public List<Collection> getAllCollectionsByUser(Long id) throws UserNotFoundException {
+        Optional<User> user = iuser.findById(id);
+
+        if (user.isPresent()) return icollection.findAllByUser(user.get());
+
+        else throw new UserNotFoundException(id);
+    }
+
+    public Collection getCollectionByUserAndName(Long id, String name) throws UserNotFoundException {
+        Optional<User> user = iuser.findById(id);
+
+        if (user.isPresent()) return icollection.findByUserAndName(user.get(), name);
+
+        else throw new UserNotFoundException(id);
     }
 
     public Collection getCollectionById(Long id) throws CollectionNotFoundException {
@@ -37,6 +54,10 @@ public class CollectionService {
 
     public Set<Machine> getCollectionMachines(Collection collection) {
         return collection.getMachines();
+    }
+
+    public Collection saveCollection(Collection collection) {
+        return icollection.save(collection);
     }
 
 }
