@@ -9,6 +9,10 @@ import jakarta.persistence.ManyToOne;
 @Entity(name="consumption_item")
 public class ComsumptionItem {
 
+
+    @Column
+    private String name;
+
     @Id
     private long id;
 
@@ -73,6 +77,14 @@ public class ComsumptionItem {
 
     public void setCarbonFootprint(Double carbonFootprint) {
         this.carbonFootprint = carbonFootprint;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
