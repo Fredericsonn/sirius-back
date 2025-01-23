@@ -56,8 +56,15 @@ public class CollectionService {
         return collection.getMachines();
     }
 
-    public Collection saveCollection(Collection collection) {
-        return icollection.save(collection);
+    public Collection saveCollection(Collection collection, Long userId) throws UserNotFoundException {
+        Optional<User> user = iuser.findById(userId);
+
+        if (user.isPresent()) {
+            collection.setUser(user.get());
+            return icollection.save(collection);
+        }
+
+        else throw new UserNotFoundException(userId);
     }
 
 }

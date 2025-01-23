@@ -116,9 +116,27 @@ public class UserController {
     }
 
     @PostMapping("/collections/post")
-    public Collection postCollection(@RequestBody Collection collection) {
-        return collectionservice.saveCollection(collection);
+    public ResponseEntity<?> postCollection(@RequestBody Collection collection)  {
+        Map<String, Object> body = new HashMap<String, Object>();
+        String msg;
+        HttpStatus status;
+
+        try {
+            Collection collec = collectionservice.saveCollection(collection, collection.getUser().getId());
+            msg = "Collection created successfully";
+            status = HttpStatus.CREATED;
+            body.put("collection", collec);
+        } catch (Exception e) {
+            e.printStackTrace();
+            msg = "Internal Server Error : " + e.getMessage();
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        body.put("msg", msg);
+
+        return ResponseEntity.status(status).body(body);
     }
+    
     @PutMapping("/put/{id}")
     public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody Map<String, Object> updates) {
         Map<String, Object> body = new HashMap<String, Object>();
