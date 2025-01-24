@@ -1,5 +1,7 @@
 package upec.episen.eco.service.User;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -11,7 +13,9 @@ import upec.episen.eco.exceptions.CollectionNotFoundException;
 import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.User.User;
+import upec.episen.eco.models.machine.Device;
 import upec.episen.eco.models.machine.Machine;
+import upec.episen.eco.models.machine.Vehicle;
 import upec.episen.eco.repositories.User.ICollection;
 import upec.episen.eco.repositories.User.IUser;
 
@@ -58,9 +62,15 @@ public class CollectionService {
 
     public Collection saveCollection(Collection collection, Long userId) throws UserNotFoundException {
         Optional<User> user = iuser.findById(userId);
-
+        Set<Machine> refinedCollections = new HashSet<>();
+        collection.getMachines().forEach(machine -> {
+            if (machine instanceof Device) machine = (Device) machine;
+            else machine = (Vehicle) machine;
+            refinedCollections.add(machine);
+        });
         if (user.isPresent()) {
             collection.setUser(user.get());
+            collection.setMachines(refinedCollections);
             return icollection.save(collection);
         }
 
