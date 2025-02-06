@@ -62,8 +62,6 @@ public class UserController {
     @GetMapping("/collections")
     public List<Collection> getAllCollections(@RequestParam(name="user", required=false) Long userId) throws UserNotFoundException {
 
-        System.out.println(userId);
-
         if (userId != null) return collectionservice.getAllCollectionsByUser(userId);
 
         return collectionservice.getAllCollections();
@@ -71,7 +69,6 @@ public class UserController {
 
     @GetMapping("/collections/{name}")
     public Collection getCollectionByName(@PathVariable String name, @RequestParam(name="userId", required=true) Long userId) throws UserNotFoundException {
-        System.out.println(collectionservice.getCollectionByUserAndName(userId, name));
         return collectionservice.getCollectionByUserAndName(userId, name);
     }
 
