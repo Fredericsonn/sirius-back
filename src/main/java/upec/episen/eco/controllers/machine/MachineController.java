@@ -31,7 +31,6 @@ public class MachineController {
         Map<String, Object> body = new HashMap<String, Object>();
         List<Device> devices = machineservice.getAllDevices();
         List<Vehicle> vehicles = machineservice.getAllVehicles();
-        System.out.println(vehicles);
 
         body.put("devices", devices);
         body.put("vehicles", vehicles);
