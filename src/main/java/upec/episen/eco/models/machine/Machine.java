@@ -18,7 +18,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
