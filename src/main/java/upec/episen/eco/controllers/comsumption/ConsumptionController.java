@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import upec.episen.eco.models.consumption.ComsumptionItem;
+import upec.episen.eco.models.consumption.ConsumptionItem;
 import upec.episen.eco.service.consumption.ComsumptionService;
 
 @RestController
@@ -19,7 +19,7 @@ public class ConsumptionController {
     private ComsumptionService conServ;
 
     @GetMapping("/{id}/items")
-    public List<ComsumptionItem> getOrderedItems(@PathVariable Long id){
+    public List<ConsumptionItem> getOrderedItems(@PathVariable Long id){
         return conServ.getOrderedItemsById(id);
     }
 

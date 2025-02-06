@@ -7,7 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity(name="consumption_item")
-public class ComsumptionItem {
+public class ConsumptionItem {
 
 
     @Column
@@ -27,23 +27,23 @@ public class ComsumptionItem {
 
     @ManyToOne
     @JoinColumn(name = "consumption_id", nullable = false)
-    private Comsumption comsumption;
+    private Consumption comsumption;
 
-    public ComsumptionItem(long id, Double usageFrequency, long quatity, Double carbonFootprint) {
+    public ConsumptionItem(long id, Double usageFrequency, long quatity, Double carbonFootprint) {
         this.id = id;
         this.usageFrequency = usageFrequency;
         this.quatity = quatity;
         this.carbonFootprint = carbonFootprint;
     }
 
-    public ComsumptionItem() {}
+    public ConsumptionItem() {}
 
     // Ajouter cette méthode getter pour accéder à l'entité Comsumption
-    public Comsumption getConsumption() {
+    public Consumption getConsumption() {
         return comsumption;
     }
 
-    public void setConsumption(Comsumption consumption) {
+    public void setConsumption(Consumption consumption) {
         this.comsumption = consumption;
     }
 

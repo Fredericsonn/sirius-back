@@ -11,7 +11,7 @@ import jakarta.persistence.OneToMany;
 
 
 @Entity
-public class Comsumption {
+public class Consumption {
 
     @Id
     private long id;
@@ -26,19 +26,19 @@ public class Comsumption {
     private LocalDate createdAt;
 
     @OneToMany(mappedBy = "comsumption", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ComsumptionItem> ComsumptionItems;
+    private Set<ConsumptionItem> ComsumptionItems;
 
-    public Comsumption(long id, String name, double totalCarbonEmitted) {
+    public Consumption(long id, String name, double totalCarbonEmitted) {
         this.id = id;
         this.name = name;
         this.totalCarbonEmitted = totalCarbonEmitted;
         this.createdAt = LocalDate.now();
     }
 
-    public Comsumption() {}
+    public Consumption() {}
 
 
-    public void setComsumptionItems(Set<ComsumptionItem> c){
+    public void setComsumptionItems(Set<ConsumptionItem> c){
         this.ComsumptionItems=c;
     }
 
