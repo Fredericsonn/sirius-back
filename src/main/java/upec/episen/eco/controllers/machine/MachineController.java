@@ -20,15 +20,4 @@ public class MachineController {
         return machineservice.getAllMachines();
     }
 
-    @PostMapping("/devices/post")
-    public List<Machine> postDevices(@RequestBody List<Device> machines) {
-        System.out.println(machines);
-        return machineservice.saveMachines(machines);
-    }
-
-    @PostMapping("/vehicles/post")
-    public List<Machine> postVehicles(@RequestBody List<Vehicle> machines) {
-        System.out.println(machines);
-        return machineservice.saveMachines(machines);
-    }
 }
