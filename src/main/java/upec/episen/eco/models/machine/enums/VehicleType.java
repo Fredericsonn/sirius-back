@@ -1,5 +1,5 @@
 package upec.episen.eco.models.machine.enums;
 
 public enum VehicleType {
-    AUTOMOBILE, MOTORCYCLE
+    CAR, MOTORCYCLE, TRUCK, VAN, BICYCLE, SCOOTER
 }

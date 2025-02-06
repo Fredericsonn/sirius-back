@@ -1,20 +1,40 @@
 package upec.episen.eco.models.machine;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import upec.episen.eco.models.machine.enums.Resource;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = Device.class, name = "Device"),
+    @JsonSubTypes.Type(value = Vehicle.class, name = "Vehicle")
+})
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Machine {
 
     @Id
@@ -24,27 +44,35 @@ public abstract class Machine {
     @Column
     private String name;
 
-    @Column(name="default_footprint")
+    @Column(name = "default_footprint")
     private double defaultFootpring;
 
     @Column
     @Enumerated(EnumType.STRING)
     private UsageCategory usage;
 
-    @ElementCollection
-    private ArrayList<Resource> resources;
+    @Column
+    private String img;
 
-    
-    public Machine(int id, String name, double f, UsageCategory us, ArrayList<Resource> r) {
+    @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<Component> resources = new HashSet<>();
+
+    @ManyToMany(mappedBy="machines")
+    private Set<Collection> collection;
+
+    public Machine(int id, String name, double f, UsageCategory us, String img, Set<Component> r) {
         this.id = id;
         this.name = name;
         this.defaultFootpring = f;
         this.usage = us;
+        this.img = img;
         this.resources = r;
     }
-    
-    public Machine() {}
-    
+
+    public Machine() {
+    }
+
     // Getters and setters
 
     public int getId() {
@@ -79,12 +107,20 @@ public abstract class Machine {
         this.usage = usage;
     }
 
-    public ArrayList<Resource> getResources() {
+    public Set<Component> getResources() {
         return resources;
     }
 
-    public void setResources(ArrayList<Resource> resources) {
+    public void setResources(Set<Component> resources) {
         this.resources = resources;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     @Override
@@ -94,7 +130,9 @@ public abstract class Machine {
                 ", name='" + name + '\'' +
                 ", defaultFootpring=" + defaultFootpring +
                 ", usage=" + usage +
+                ", img=" + img +
                 ", resources=" + resources +
                 '}';
     }
+
 }

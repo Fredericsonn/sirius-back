@@ -1,10 +1,9 @@
 package upec.episen.eco.models.machine;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import upec.episen.eco.models.machine.enums.Resource;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
 
@@ -14,8 +13,8 @@ public class Device extends Machine {
     @Column
     private double power;
 
-    public Device(int id, String name, double f, UsageCategory us, ArrayList<Resource> r, double p) {
-        super(id, name, f, us, r);
+    public Device(int id, String name, double f, UsageCategory us, String img, Set<Component> r, double p) {
+        super(id, name, f, us, img, r);
         this.power = p;
     }
 

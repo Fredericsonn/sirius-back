@@ -1,26 +1,35 @@
 package upec.episen.eco.models.consumption;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 
 @Entity
-public class Comsumption {
+public class Consumption {
+
     @Id
     private long id;
+
     @Column
     private String name;
+
     @Column
     private double totalCarbonEmitted;
 
-    public Comsumption(long id, String name, double totalCarbonEmitted) {
+    @Column
+    private LocalDate createdAt;
+
+    public Consumption(long id, String name, double totalCarbonEmitted) {
         this.id = id;
         this.name = name;
         this.totalCarbonEmitted = totalCarbonEmitted;
+        this.createdAt = LocalDate.now();
     }
 
-    public Comsumption() {}
+    public Consumption() {}
 
     public long getId() {
         return id;
@@ -45,13 +54,18 @@ public class Comsumption {
     public void setTotalCarbonEmitted(double totalCarbonEmitted) {
         this.totalCarbonEmitted = totalCarbonEmitted;
     }
+    
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
 
     @Override
     public String toString() {
-        return "Comsumption{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", totalCarbonEmitted=" + totalCarbonEmitted +
-                '}';
+        return "Comsumption [id=" + id + ", name=" + name + ", totalCarbonEmitted=" + totalCarbonEmitted
+                + ", createdAt=" + createdAt + "]";
     }
 }

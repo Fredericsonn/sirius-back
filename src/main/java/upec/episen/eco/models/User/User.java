@@ -1,12 +1,24 @@
 package upec.episen.eco.models.User;
 
+import java.util.Set;
+
+import org.hibernate.annotations.Formula;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = { "username" }))
 public class User {
 
     @Id
@@ -16,14 +28,20 @@ public class User {
     @Column
     private String username;
 
-    @Column(name="phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column 
+    @Column
     private String email;
 
     @Column
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Collection> collections;
+
+    @Formula("dtype")
+    private String dtype;
 
     public User(String username, String phoneNumber, String email, String password) {
         this.username = username;
@@ -32,7 +50,8 @@ public class User {
         this.password = password;
     }
 
-    public User() {}
+    public User() {
+    }
 
     public long getId() {
         return id;
@@ -80,8 +99,4 @@ public class User {
                 + ", password=" + password + "]";
     }
 
-    
-    
-    
-    
 }
