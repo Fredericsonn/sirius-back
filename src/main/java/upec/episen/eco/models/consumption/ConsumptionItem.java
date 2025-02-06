@@ -3,29 +3,49 @@ package upec.episen.eco.models.consumption;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
-@Entity
-public class ComsumptionItem {
+@Entity(name="consumption_item")
+public class ConsumptionItem {
+
+
+    @Column
+    private String name;
+
     @Id
     private long id;
+
     @Column
-    private double usageFrequency;
+    private Double usageFrequency;
+
     @Column
     private long quatity;
-    @Column
-    private double carbonFootprint;
 
-    public ComsumptionItem(long id, double usageFrequency, long quatity, double carbonFootprint) {
+    @Column
+    private Double carbonFootprint;
+
+    @ManyToOne
+    @JoinColumn(name = "consumption_id", nullable = false)
+    private Consumption comsumption;
+
+    public ConsumptionItem(long id, Double usageFrequency, long quatity, Double carbonFootprint) {
         this.id = id;
         this.usageFrequency = usageFrequency;
         this.quatity = quatity;
         this.carbonFootprint = carbonFootprint;
     }
 
-    public ComsumptionItem() {
+    public ConsumptionItem() {}
 
+    // Ajouter cette méthode getter pour accéder à l'entité Comsumption
+    public Consumption getConsumption() {
+        return comsumption;
     }
 
+    public void setConsumption(Consumption consumption) {
+        this.comsumption = consumption;
+    }
 
     public long getId() {
         return id;
@@ -35,11 +55,11 @@ public class ComsumptionItem {
         this.id = id;
     }
 
-    public double getUsageFrequency() {
+    public Double getUsageFrequency() {
         return usageFrequency;
     }
 
-    public void setUsageFrequency(double usageFrequency) {
+    public void setUsageFrequency(Double usageFrequency) {
         this.usageFrequency = usageFrequency;
     }
 
@@ -51,12 +71,20 @@ public class ComsumptionItem {
         this.quatity = quatity;
     }
 
-    public double getCarbonFootprint() {
+    public Double getCarbonFootprint() {
         return carbonFootprint;
     }
 
-    public void setCarbonFootprint(double carbonFootprint) {
+    public void setCarbonFootprint(Double carbonFootprint) {
         this.carbonFootprint = carbonFootprint;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
