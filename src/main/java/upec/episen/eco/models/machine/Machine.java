@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.machine.enums.Resource;
@@ -30,7 +29,7 @@ public abstract class Machine {
     private String name;
 
     @Column(name = "default_footprint")
-    private double defaultFootpring;
+    private double defaultFootprint;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -48,7 +47,7 @@ public abstract class Machine {
     public Machine(int id, String name, double f, UsageCategory us, String img, List<Resource> r) {
         this.id = id;
         this.name = name;
-        this.defaultFootpring = f;
+        this.defaultFootprint = f;
         this.usage = us;
         this.img = img;
         this.resources = r;
@@ -75,12 +74,12 @@ public abstract class Machine {
         this.name = name;
     }
 
-    public double getDefaultFootpring() {
-        return defaultFootpring;
+    public double getDefaultFootprint() {
+        return defaultFootprint;
     }
 
-    public void setDefaultFootpring(double defaultFootpring) {
-        this.defaultFootpring = defaultFootpring;
+    public void setDefaultFootprint(double defaultFootprint) {
+        this.defaultFootprint = defaultFootprint;
     }
 
     public UsageCategory getUsage() {
@@ -112,7 +111,7 @@ public abstract class Machine {
         return "Machine{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", defaultFootpring=" + defaultFootpring +
+                ", defaultFootpring=" + defaultFootprint +
                 ", usage=" + usage +
                 ", img=" + img +
                 ", resources=" + resources +

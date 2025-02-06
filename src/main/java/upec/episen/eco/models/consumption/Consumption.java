@@ -1,10 +1,13 @@
 package upec.episen.eco.models.consumption;
 
 import java.time.LocalDate;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -22,6 +25,9 @@ public class Consumption {
     @Column
     private LocalDate createdAt;
 
+    @OneToMany(mappedBy = "comsumption", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ConsumptionItem> ComsumptionItems;
+
     public Consumption(long id, String name, double totalCarbonEmitted) {
         this.id = id;
         this.name = name;
@@ -30,6 +36,11 @@ public class Consumption {
     }
 
     public Consumption() {}
+
+
+    public void setConsumptionItems(Set<ConsumptionItem> c){
+        this.ComsumptionItems=c;
+    }
 
     public long getId() {
         return id;
