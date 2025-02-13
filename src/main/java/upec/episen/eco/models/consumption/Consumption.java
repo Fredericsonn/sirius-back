@@ -8,6 +8,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import upec.episen.eco.models.User.User;
 
 
 @Entity
@@ -25,10 +27,29 @@ public class Consumption {
     @Column
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "comsumption", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "consumption", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ConsumptionItem> ComsumptionItems;
 
-    public Consumption(long id, String name, double totalCarbonEmitted) {
+    @OneToOne
+    private User user;
+
+    public Set<ConsumptionItem> getComsumptionItems() {
+        return ComsumptionItems;
+    }
+
+    public void setComsumptionItems(Set<ConsumptionItem> comsumptionItems) {
+        ComsumptionItems = comsumptionItems;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Consumption(long id, String name, double totalCarbonEmitted, User user) {
         this.id = id;
         this.name = name;
         this.totalCarbonEmitted = totalCarbonEmitted;

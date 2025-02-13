@@ -9,27 +9,29 @@ import jakarta.persistence.ManyToOne;
 @Entity(name="consumption_item")
 public class ConsumptionItem {
 
-
     @Column
     private String name;
 
     @Id
     private long id;
 
+    @Column(name = "energy_input")
+    private double energyInput;
+    
     @Column
-    private Double usageFrequency;
+    private double usageFrequency;
 
     @Column
     private long quatity;
 
     @Column
-    private Double carbonFootprint;
+    private double carbonFootprint;
 
     @ManyToOne
     @JoinColumn(name = "consumption_id", nullable = false)
-    private Consumption comsumption;
+    private Consumption consumption;
 
-    public ConsumptionItem(long id, Double usageFrequency, long quatity, Double carbonFootprint) {
+    public ConsumptionItem(long id, double usageFrequency, long quatity, double carbonFootprint) {
         this.id = id;
         this.usageFrequency = usageFrequency;
         this.quatity = quatity;
@@ -40,11 +42,11 @@ public class ConsumptionItem {
 
     // Ajouter cette méthode getter pour accéder à l'entité Comsumption
     public Consumption getConsumption() {
-        return comsumption;
+        return consumption;
     }
 
     public void setConsumption(Consumption consumption) {
-        this.comsumption = consumption;
+        this.consumption = consumption;
     }
 
     public long getId() {
@@ -55,11 +57,19 @@ public class ConsumptionItem {
         this.id = id;
     }
 
-    public Double getUsageFrequency() {
+    public double getEnergyInput() {
+        return energyInput;
+    }
+
+    public void setEnergyInput(double energyInput) {
+        this.energyInput = energyInput;
+    }
+
+    public double getUsageFrequency() {
         return usageFrequency;
     }
 
-    public void setUsageFrequency(Double usageFrequency) {
+    public void setUsageFrequency(double usageFrequency) {
         this.usageFrequency = usageFrequency;
     }
 
@@ -71,11 +81,11 @@ public class ConsumptionItem {
         this.quatity = quatity;
     }
 
-    public Double getCarbonFootprint() {
+    public double getCarbonFootprint() {
         return carbonFootprint;
     }
 
-    public void setCarbonFootprint(Double carbonFootprint) {
+    public void setCarbonFootprint(double carbonFootprint) {
         this.carbonFootprint = carbonFootprint;
     }
 
@@ -89,11 +99,11 @@ public class ConsumptionItem {
 
     @Override
     public String toString() {
-        return "ComsumptionItem{" +
-                "id=" + id +
-                ", usageFrequency=" + usageFrequency +
-                ", quatity=" + quatity +
-                ", carbonFootprint=" + carbonFootprint +
-                '}';
+        return "ConsumptionItem [name=" + name + ", id=" + id + ", energyInput=" + energyInput + ", usageFrequency="
+                + usageFrequency + ", quatity=" + quatity + ", carbonFootprint=" + carbonFootprint + ", consumption="
+                + consumption + "]";
     }
+
+
+    
 }
