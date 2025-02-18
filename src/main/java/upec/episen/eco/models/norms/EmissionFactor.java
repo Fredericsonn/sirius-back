@@ -7,9 +7,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import upec.episen.eco.models.consumption.EnergyType;
 
 @Entity
+@Table(name = "emission_factor")
 public class EmissionFactor {
 
     @Id
@@ -26,6 +28,10 @@ public class EmissionFactor {
     public EmissionFactor(EnergyType energyType, double emissionFactor) {
         this.energyType = energyType;
         this.emissionFactor = emissionFactor;
+    }
+
+    public EmissionFactor() {
+        
     }
 
     public long getId() {

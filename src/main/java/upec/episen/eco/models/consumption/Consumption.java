@@ -3,9 +3,13 @@ package upec.episen.eco.models.consumption;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -16,6 +20,7 @@ import upec.episen.eco.models.User.User;
 public class Consumption {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
@@ -28,17 +33,22 @@ public class Consumption {
     private LocalDate createdAt;
 
     @OneToMany(mappedBy = "consumption", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ConsumptionItem> ComsumptionItems;
+    @JsonManagedReference
+    private Set<ConsumptionItem> items;
 
     @OneToOne
     private User user;
 
-    public Set<ConsumptionItem> getComsumptionItems() {
-        return ComsumptionItems;
+    public Consumption(String name, User user, Set<ConsumptionItem> items) {
+        this.name = name;
+        this.user = user;
+        this.items = items;
     }
 
-    public void setComsumptionItems(Set<ConsumptionItem> comsumptionItems) {
-        ComsumptionItems = comsumptionItems;
+    public Consumption() {}
+
+    public Set<ConsumptionItem> getConsumptionItems() {
+        return items;
     }
 
     public User getUser() {
@@ -49,18 +59,8 @@ public class Consumption {
         this.user = user;
     }
 
-    public Consumption(long id, String name, double totalCarbonEmitted, User user) {
-        this.id = id;
-        this.name = name;
-        this.totalCarbonEmitted = totalCarbonEmitted;
-        this.createdAt = LocalDate.now();
-    }
-
-    public Consumption() {}
-
-
     public void setConsumptionItems(Set<ConsumptionItem> c){
-        this.ComsumptionItems=c;
+        this.items=c;
     }
 
     public long getId() {
@@ -97,7 +97,7 @@ public class Consumption {
 
     @Override
     public String toString() {
-        return "Comsumption [id=" + id + ", name=" + name + ", totalCarbonEmitted=" + totalCarbonEmitted
-                + ", createdAt=" + createdAt + "]";
+        return "Consumption [id=" + id + ", name=" + name + ", totalCarbonEmitted=" + totalCarbonEmitted
+                + ", createdAt=" + createdAt + ", items=" + items + ", user=" + user + "]";
     }
 }

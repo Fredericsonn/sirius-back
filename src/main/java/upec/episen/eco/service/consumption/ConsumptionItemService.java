@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import upec.episen.eco.exceptions.ConsumptionNotFoundException;
 import upec.episen.eco.models.consumption.Consumption;
 import upec.episen.eco.models.consumption.ConsumptionItem;
+import upec.episen.eco.models.consumption.EnergyType;
 import upec.episen.eco.repositories.consumption.IConsumptionItem;
+import upec.episen.eco.service.norms.EmissionFactorService;
 
 @Service
 public class ConsumptionItemService {

@@ -60,6 +60,7 @@ public class ConsumptionController {
 
     @PostMapping("/post")
     public ResponseEntity<?> postConsumption(@RequestBody Consumption consumption) {
+        System.out.println(consumption);
         String msg;
         HttpStatus status;
 
