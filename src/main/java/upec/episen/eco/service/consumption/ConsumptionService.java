@@ -15,6 +15,8 @@ import upec.episen.eco.models.User.User;
 import upec.episen.eco.models.consumption.Consumption;
 import upec.episen.eco.models.consumption.ConsumptionItem;
 import upec.episen.eco.models.consumption.EnergyType;
+import upec.episen.eco.models.machine.Device;
+import upec.episen.eco.models.machine.Machine;
 import upec.episen.eco.repositories.consumption.IConsumption;
 import upec.episen.eco.service.User.UserService;
 import upec.episen.eco.service.norms.EmissionFactorService;
@@ -71,7 +73,12 @@ public class ConsumptionService {
 
     public double calculateItemCarbonEmitted(ConsumptionItem item, EnergyType type) {
         double emissionFactor = emissionFactorService.getEmissionFactorByEnergyType(type);
-        double carbonemitted = item.getEnergyInput() * item.getUsageFrequency() * emissionFactor;
+        Machine machine = item.getMachine();
+        double carbonemitted;
+
+        if (machine instanceof Device) carbonemitted = item.getEnergyInput() * item.getUsageFrequency() * emissionFactor;
+
+        else carbonemitted = item.getUsageFrequency() * emissionFactor;
 
         // the provided values for ELECTRICITY type are in watts, so we converted it to kwh
         if (type == EnergyType.ELECTRICITY) carbonemitted /= 1000; 
