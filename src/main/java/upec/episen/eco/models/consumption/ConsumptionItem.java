@@ -32,7 +32,6 @@ public class ConsumptionItem {
 
     @Column
     private long quantity;
-
     @Column
     private double carbonFootprint;
 
