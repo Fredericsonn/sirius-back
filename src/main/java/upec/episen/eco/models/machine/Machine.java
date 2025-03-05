@@ -21,6 +21,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import upec.episen.eco.models.User.Collection;
+import upec.episen.eco.models.consumption.ConsumptionItem;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 
 @JsonTypeInfo(
@@ -60,6 +61,9 @@ public abstract class Machine {
 
     @ManyToMany(mappedBy="machines")
     private Set<Collection> collection;
+
+    @OneToMany(mappedBy = "machine")
+    private Set<ConsumptionItem> items;
 
     public Machine(int id, String name, double f, UsageCategory us, String img, Set<Component> r) {
         this.id = id;
@@ -122,6 +126,8 @@ public abstract class Machine {
     public void setImg(String img) {
         this.img = img;
     }
+
+    public abstract String getType();
 
     @Override
     public String toString() {

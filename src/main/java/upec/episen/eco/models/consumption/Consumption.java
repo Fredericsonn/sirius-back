@@ -3,6 +3,7 @@ package upec.episen.eco.models.consumption;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -11,8 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import upec.episen.eco.models.User.User;
 
 
@@ -32,11 +33,11 @@ public class Consumption {
     @Column
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "consumption", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "consumption", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     @JsonManagedReference
     private Set<ConsumptionItem> items;
 
-    @OneToOne
+    @ManyToOne
     private User user;
 
     public Consumption(String name, User user, Set<ConsumptionItem> items) {

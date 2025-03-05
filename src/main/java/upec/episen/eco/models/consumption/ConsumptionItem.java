@@ -2,6 +2,7 @@ package upec.episen.eco.models.consumption;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,7 +37,7 @@ public class ConsumptionItem {
     @Column
     private double carbonFootprint;
 
-    @OneToOne
+    @ManyToOne
     private Machine machine;
 
     @Column(name = "energy_type")

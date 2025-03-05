@@ -4,12 +4,14 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import upec.episen.eco.exceptions.ConsumptionNotFoundException;
+import upec.episen.eco.exceptions.MachineNotFoundException;
 import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.User.User;
 import upec.episen.eco.models.consumption.Consumption;
@@ -19,6 +21,7 @@ import upec.episen.eco.models.machine.Device;
 import upec.episen.eco.models.machine.Machine;
 import upec.episen.eco.repositories.consumption.IConsumption;
 import upec.episen.eco.service.User.UserService;
+import upec.episen.eco.service.machine.MachineService;
 import upec.episen.eco.service.norms.EmissionFactorService;
 
 @Service
@@ -32,6 +35,9 @@ public class ConsumptionService {
 
     @Autowired
     private EmissionFactorService emissionFactorService;
+
+    @Autowired
+    private MachineService machineService;
 
     public List<Consumption> getAllConsumptions() {
         return iconsumption.findAll();
@@ -56,6 +62,18 @@ public class ConsumptionService {
     }
 
     public Consumption saveConsumption(Consumption consumption) {
+        consumption.getConsumptionItems().forEach(item -> {
+            long id = item.getMachine().getId();
+            String type = item.getMachine().getType();
+            try {
+                Machine machine = machineService.findById(id, type);
+                item.setMachine(machine);
+            } catch (MachineNotFoundException e) {
+                e.printStackTrace();
+                return;
+            }
+        });
+        
         // we calculate each consumption item's emitted carbon
         consumption.getConsumptionItems().forEach(item -> item.setCarbonFootprint(calculateItemCarbonEmitted(item, item.getEnergyType())));
 

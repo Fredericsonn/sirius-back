@@ -62,17 +62,21 @@ public class ConsumptionController {
     public ResponseEntity<?> postConsumption(@RequestBody Consumption consumption) {
         String msg;
         HttpStatus status;
+        Map<String, Object> body = new HashMap<String, Object>();
 
         try {
-            consumptionservice.saveConsumption(consumption);
+            Consumption c = consumptionservice.saveConsumption(consumption);
             msg = "consumption created successfully";
             status = HttpStatus.OK;
+            body.put("consumption", c);
         } catch (Exception e) {
             msg = e.getMessage();
             status = HttpStatus.NOT_ACCEPTABLE;
         }
 
-        return ResponseEntity.status(status).body(Map.of("msg", msg));
+        body.put("msg", msg);
+        
+        return ResponseEntity.status(status).body(body);
     }
 
     @PostMapping("/items/post")
