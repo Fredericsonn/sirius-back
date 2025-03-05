@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,12 @@ import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.User.User;
 import upec.episen.eco.models.consumption.Consumption;
 import upec.episen.eco.models.consumption.ConsumptionItem;
-import upec.episen.eco.models.consumption.EnergyType;
+import upec.episen.eco.models.consumption.enums.EnergyType;
 import upec.episen.eco.models.machine.Device;
 import upec.episen.eco.models.machine.Machine;
+import upec.episen.eco.models.machine.Vehicle;
+import upec.episen.eco.models.machine.enums.VehicleSize;
+import upec.episen.eco.models.machine.enums.VehicleType;
 import upec.episen.eco.repositories.consumption.IConsumption;
 import upec.episen.eco.service.User.UserService;
 import upec.episen.eco.service.machine.MachineService;
@@ -75,7 +77,7 @@ public class ConsumptionService {
         });
         
         // we calculate each consumption item's emitted carbon
-        consumption.getConsumptionItems().forEach(item -> item.setCarbonFootprint(calculateItemCarbonEmitted(item, item.getEnergyType())));
+        consumption.getConsumptionItems().forEach(item -> item.setCarbonFootprint(calculateItemCarbonFootprint(item, item.getEnergyType())));
 
         // we sum each item's emitted carbon and set it as the consumption's total emission
         consumption.setTotalCarbonEmitted(calculateTotalCarbonEmitted(consumption));
@@ -89,21 +91,57 @@ public class ConsumptionService {
         return consumption.getConsumptionItems().stream().mapToDouble(item -> item.getCarbonFootprint()).sum();
     }
 
-    public double calculateItemCarbonEmitted(ConsumptionItem item, EnergyType type) {
-        double emissionFactor = emissionFactorService.getEmissionFactorByEnergyType(type);
-        Machine machine = item.getMachine();
-        double carbonemitted;
+    public double calculateItemCarbonFootprint(ConsumptionItem item, EnergyType energyType) {
+        
+        Machine machine = item.getMachine(); // we get the item's machine
+        double carbonemitted; // the variable that will store the calculated carbon footprint
 
-        if (machine instanceof Device) carbonemitted = item.getEnergyInput() * item.getUsageFrequency() * emissionFactor;
+        /*  the method that gets emission factors expects 3 arguments, 2 of them are null in case the item's machine is a device that's 
+                        
+                                why in this first part we check before proceeding */
 
-        else carbonemitted = item.getUsageFrequency() * emissionFactor;
+        // in case the machine is a vehicle we get the corresponding type and size
+        VehicleType type = (machine instanceof Vehicle vehicle) ? vehicle.getVehicleType() : null;
+        VehicleSize size = (machine instanceof  Vehicle vehicle) ? vehicle.getSize() : null;
+
+        // we get the corresponding emission factor
+        double emissionFactor = emissionFactorService.getEmissionFactor(energyType, type, size);
+
+        /* Now in this part we calculate the carbon footprint based on the machine type */
+        
+        // for devices it's pretty straight forward
+        if (machine instanceof Device) carbonemitted = item.getEnergyInput() * item.getUsageFrequency() * emissionFactor; 
+        //                                in KgCO2     in watss or cubic metters      in hours            in KgCO2/kwh or cubic metters      
+
+        // Now it gets a bit messy, if the machine is a vehicle, there are 2 different ways to calculate the carbon footprint
+        else { 
+
+            /* Electrical vehicle don't produce any CO2, so what we're mesuring is the carbon emitted to generate the electricity it's running on,
+               and the corresponding value in the emission factors table is actually a watts consumption per km, so we still need to multiply it by
+               the electricity's emission factor 
+             */
+            if (energyType == EnergyType.ELECTRIC) {
+
+                // we get the electricity's carbon emission factor
+                double electricityEmissionFactor = emissionFactorService.getElectricityEmissionFactor();
+
+                // just to eliminate confusion 
+                double consumptionPerKm = emissionFactor;
+
+
+                carbonemitted = item.getUsageFrequency() * consumptionPerKm * electricityEmissionFactor;
+                //  in KgCO2             in km                 in kwh/h             in KgCO2/kwh
+            }
+
+            // if it's running on diesel or gasoline, then we simply get the corresponding emission factor and calculate the footprint
+            else carbonemitted = item.getUsageFrequency() * emissionFactor;
+            //      in KgCO2             in km                in KgCO2/km        
+        }
 
         // the provided values for ELECTRICITY type are in watts, so we converted it to kwh
-        if (type == EnergyType.ELECTRICITY) carbonemitted /= 1000; 
+        if (energyType == EnergyType.ELECTRICITY) carbonemitted /= 1000; 
 
-        BigDecimal bd = new BigDecimal(carbonemitted);
-        bd = bd.setScale(2, RoundingMode.HALF_UP ); // we round the calculated value to 2 numbers after the comma
-
-        return bd.doubleValue();
+        // we round the calculated value to 2 numbers after the comma and return the value of the footprint
+        return BigDecimal.valueOf(carbonemitted).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 }

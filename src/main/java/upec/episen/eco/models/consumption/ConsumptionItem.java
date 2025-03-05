@@ -2,7 +2,6 @@ package upec.episen.eco.models.consumption;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,7 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import upec.episen.eco.models.consumption.enums.EnergyType;
 import upec.episen.eco.models.machine.Machine;
 
 @Entity(name="consumption_item")
