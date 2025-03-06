@@ -1,8 +1,11 @@
 package upec.episen.eco.models.User;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.hibernate.annotations.Formula;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,6 +18,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import upec.episen.eco.models.consumption.Consumption;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -42,6 +46,9 @@ public class User {
 
     @Formula("dtype")
     private String dtype;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Consumption> consumptions;
 
     public User(String username, String phoneNumber, String email, String password) {
         this.username = username;

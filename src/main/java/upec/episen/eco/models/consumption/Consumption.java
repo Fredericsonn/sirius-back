@@ -3,17 +3,25 @@ package upec.episen.eco.models.consumption;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import upec.episen.eco.models.User.User;
 
 
 @Entity
 public class Consumption {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
@@ -25,21 +33,36 @@ public class Consumption {
     @Column
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "comsumption", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ConsumptionItem> ComsumptionItems;
+    @OneToMany(mappedBy = "consumption", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<ConsumptionItem> items;
 
-    public Consumption(long id, String name, double totalCarbonEmitted) {
-        this.id = id;
+    @ManyToOne
+    private User user;
+
+    public Consumption(String name, User user, Set<ConsumptionItem> items) {
         this.name = name;
-        this.totalCarbonEmitted = totalCarbonEmitted;
-        this.createdAt = LocalDate.now();
+        this.user = user;
+        this.items = items;
     }
 
     public Consumption() {}
 
+    public Set<ConsumptionItem> getConsumptionItems() {
+        return items;
+    }
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public void setConsumptionItems(Set<ConsumptionItem> c){
-        this.ComsumptionItems=c;
+        this.items=c;
     }
 
     public long getId() {
@@ -76,7 +99,7 @@ public class Consumption {
 
     @Override
     public String toString() {
-        return "Comsumption [id=" + id + ", name=" + name + ", totalCarbonEmitted=" + totalCarbonEmitted
-                + ", createdAt=" + createdAt + "]";
+        return "Consumption [id=" + id + ", name=" + name + ", totalCarbonEmitted=" + totalCarbonEmitted
+                + ", createdAt=" + createdAt + ", items=" + items + ", user=" + user + "]";
     }
 }

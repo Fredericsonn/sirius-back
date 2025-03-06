@@ -19,12 +19,12 @@ public class Vehicle extends Machine {
 
     @Column(name = "vehicle_type")
     @Enumerated(EnumType.STRING)
-    private VehicleType type;
+    private VehicleType vehicleType;
 
-    public Vehicle(int id, String name, double f, UsageCategory us, String img, Set<Component> r, VehicleSize size, VehicleType type) {
+    public Vehicle(int id, String name, double f, UsageCategory us, String img, Set<Component> r, VehicleSize size, VehicleType vehicleType) {
         super(id, name, f, us, img, r);
         this.size = size;
-        this.type = type;
+        this.vehicleType = vehicleType;
     }
 
     public Vehicle() {}
@@ -37,19 +37,24 @@ public class Vehicle extends Machine {
         this.size = size;
     }
 
-    public VehicleType getType() {
-        return type;
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
-    public void setType(VehicleType type) {
-        this.type = type;
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
     @Override
     public String toString() {
         return "Vehicle{" +
                 "size=" + size +
-                ", type=" + type +
+                ", vehicle type=" + vehicleType +
                 "} " + super.toString();
+    }
+
+    @Override
+    public String getType() {
+        return "vehicle";
     }
 }
