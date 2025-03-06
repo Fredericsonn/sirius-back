@@ -109,7 +109,14 @@ public class ConsumptionService {
 
         // we calculate each consumption item's emitted carbon
         consumption.getConsumptionItems()
-                .forEach(item -> item.setCarbonFootprint(calculateTotalCarbonEmittedTemp(item)));
+                .forEach(item -> {
+                    item.setCarbonFootprint(calculateTotalCarbonEmittedTemp(item));
+                    item.setQuantity(1);
+                });
+
+        consumption.setTotalCarbonEmitted(calculateTotalCarbonEmitted(consumption));
+
+        consumption.setCreatedAt(LocalDate.now());
 
         return iconsumption.save(consumption);
     }
@@ -186,8 +193,7 @@ public class ConsumptionService {
         return BigDecimal.valueOf(carbonemitted).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
-    // in this version, the items parameter are all identical and predifined in the
-    // AlgoParam entity
+    // in this version, the items parameter are all identical and predifined in the AlgoParam entity
     public double calculateTotalCarbonEmittedTemp(ConsumptionItem item) {
 
         Machine machine = item.getMachine();
@@ -202,7 +208,7 @@ public class ConsumptionService {
 
             double emission_factor = param.getEmissionFactor();
 
-            carbonEmitted = usageFrequency * energyInput * emission_factor;
+            carbonEmitted = usageFrequency * energyInput * emission_factor / 1000;
 
         }
 
