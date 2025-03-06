@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import upec.episen.eco.exceptions.ConsumptionNotFoundException;
 import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.consumption.Consumption;
 import upec.episen.eco.models.consumption.ConsumptionItem;
@@ -53,6 +55,16 @@ public class ConsumptionController {
 
     }
 
+    @GetMapping("/{id}")
+    public Consumption getConsumptionById(@PathVariable long id) {
+
+        try {
+            return consumptionservice.getConsumptionById(id);
+        } catch (ConsumptionNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     @GetMapping("/{id}/items")
     public List<ConsumptionItem> getOrderedItems(@PathVariable Long id){
         return consumptionservice.getOrderedItemsById(id);
@@ -77,6 +89,12 @@ public class ConsumptionController {
         body.put("msg", msg);
         
         return ResponseEntity.status(status).body(body);
+    }
+
+    @PostMapping("/post/temp")
+    public Consumption postConsumptionTemp(@RequestBody Consumption consumption) {
+
+        return consumptionservice.saveConsumptionTemp(consumption);
     }
 
     @PostMapping("/items/post")
