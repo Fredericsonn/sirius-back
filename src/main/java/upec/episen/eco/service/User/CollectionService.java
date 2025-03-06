@@ -1,10 +1,8 @@
 package upec.episen.eco.service.User;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +11,8 @@ import upec.episen.eco.exceptions.CollectionNotFoundException;
 import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.User.User;
-import upec.episen.eco.models.machine.Device;
-import upec.episen.eco.models.machine.Machine;
-import upec.episen.eco.models.machine.Vehicle;
+import upec.episen.eco.models.machine.*;
+import upec.episen.eco.models.machine.Algo.MatterImpactScore;
 import upec.episen.eco.repositories.User.ICollection;
 import upec.episen.eco.repositories.User.IUser;
 
@@ -76,5 +73,44 @@ public class CollectionService {
 
         else throw new UserNotFoundException(userId);
     }
+//Algorithme khalil pour le calcule de l'impact materiel
+    public double calculateCollectionImpact(Long collectionId) throws CollectionNotFoundException {
+        Collection collection = getCollectionById(collectionId);
+        Set<Machine> machines = collection.getMachines();
 
+        double totalImpact = 0;
+        double totalVolume = 0;
+        Map<String, Double> materialUsage = new HashMap<>();
+
+        for (Machine machine : machines) {
+            for (Component component : machine.getResources()) {
+                for (Matter matter : component.getMatters()) {
+                    String material = matter.getValue();
+                    double volume = matter.getVolume();
+
+                    double impactFactor = MatterImpactScore.getImpactFactor(material);
+                    double materialImpact = volume * impactFactor;
+
+                    totalImpact += materialImpact;
+                    totalVolume += volume;
+
+                    materialUsage.put(material, materialUsage.getOrDefault(material, 0.0) + volume);
+                }
+            }
+        }
+
+
+        double averageImpact = totalImpact / totalVolume;
+        double baseScore = Math.max(1, 10 - (averageImpact * 100));
+
+        double volumeAdjustment = MatterImpactScore.calculateUsageAdjustment(materialUsage);
+
+        double finalScore = baseScore + volumeAdjustment;
+
+        double result = Math.max(1, Math.min(10, finalScore));
+
+        BigDecimal bd = new BigDecimal(result);
+        return bd.doubleValue();
+    }
 }
+

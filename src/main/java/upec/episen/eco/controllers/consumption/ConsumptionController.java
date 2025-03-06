@@ -92,4 +92,6 @@ public class ConsumptionController {
 
         return ResponseEntity.status(status).body(Map.of("msg", msg));
     }
+
+
 }

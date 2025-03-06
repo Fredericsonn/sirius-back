@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import upec.episen.eco.controllers.Helper;
+import upec.episen.eco.exceptions.ConsumptionNotFoundException;
 import upec.episen.eco.models.machine.Device;
 import upec.episen.eco.models.machine.Machine;
 import upec.episen.eco.models.machine.Vehicle;
@@ -42,6 +43,15 @@ public class MachineController {
     public List<Machine> getMachinesByUsageCategory(@PathVariable String category) {
         category = Helper.usageCategoryRectifier(category);
         return machineservice.getAllMachinesByUsageCategory(UsageCategory.valueOf(category));
+    }
+    @GetMapping("/matter-impact")
+    public Map<String, Double> getMatterImpact() {
+        return machineservice.calculateMatterImpact();
+    }
+
+    @GetMapping("/consumption/{id}/impact")
+    public double getConsumptionImpact(@PathVariable Long id) throws ConsumptionNotFoundException {
+        return machineservice.calculateConsumptionImpact(id);
     }
 
 }

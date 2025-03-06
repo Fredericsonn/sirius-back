@@ -81,4 +81,5 @@ public class ConsumptionService {
 
         return bd.doubleValue();
     }
+
 }
