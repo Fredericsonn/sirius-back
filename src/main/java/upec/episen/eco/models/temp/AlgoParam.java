@@ -20,7 +20,7 @@ public class AlgoParam {
     private String type;
 
     @Column(name="energy_input")
-    private double energyInput;
+    private Double energyInput;
 
     @Column(name="usage_frequency")
     private double usageFequency;

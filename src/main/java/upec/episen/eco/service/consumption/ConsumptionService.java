@@ -55,8 +55,10 @@ public class ConsumptionService {
         User user = userservice.getUserById(userId);
         return iconsumption.findAllByUser(user);
     }
+
     // Dans ConsumptionService.java
-    public List<ConsumptionItem> getConsumptionItemsByConsumption(Long consumptionId) throws ConsumptionNotFoundException {
+    public List<ConsumptionItem> getConsumptionItemsByConsumption(Long consumptionId)
+            throws ConsumptionNotFoundException {
         Consumption consumption = getConsumptionById(consumptionId);
         return new ArrayList<>(consumption.getConsumptionItems());
     }
@@ -115,7 +117,14 @@ public class ConsumptionService {
 
         // we calculate each consumption item's emitted carbon
         consumption.getConsumptionItems()
-                .forEach(item -> item.setCarbonFootprint(calculateTotalCarbonEmittedTemp(item)));
+                .forEach(item -> {
+                    item.setCarbonFootprint(calculateTotalCarbonEmittedTemp(item));
+                    item.setQuantity(1);
+                });
+
+        consumption.setTotalCarbonEmitted(calculateTotalCarbonEmitted(consumption));
+
+        consumption.setCreatedAt(LocalDate.now());
 
         return iconsumption.save(consumption);
     }
@@ -208,7 +217,7 @@ public class ConsumptionService {
 
             double emission_factor = param.getEmissionFactor();
 
-            carbonEmitted = usageFrequency * energyInput * emission_factor;
+            carbonEmitted = usageFrequency * energyInput * emission_factor / 1000;
 
         }
 
