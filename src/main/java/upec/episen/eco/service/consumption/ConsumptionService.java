@@ -3,6 +3,7 @@ package upec.episen.eco.service.consumption;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,11 @@ public class ConsumptionService {
     public List<Consumption> getAllConsumptionsByUser(Long userId) throws UserNotFoundException {
         User user = userservice.getUserById(userId);
         return iconsumption.findAllByUser(user);
+    }
+    // Dans ConsumptionService.java
+    public List<ConsumptionItem> getConsumptionItemsByConsumption(Long consumptionId) throws ConsumptionNotFoundException {
+        Consumption consumption = getConsumptionById(consumptionId);
+        return new ArrayList<>(consumption.getConsumptionItems());
     }
 
     public Consumption getConsumptionById(Long id) throws ConsumptionNotFoundException {

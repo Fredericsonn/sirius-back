@@ -51,6 +51,7 @@ public class Consumption {
         return items;
     }
 
+
     public User getUser() {
         return user;
     }
