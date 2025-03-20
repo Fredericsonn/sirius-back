@@ -1,143 +1,189 @@
 package upec.episen.eco.models.machine.Algo;
 
+import upec.episen.eco.models.User.Collection;
+import upec.episen.eco.models.machine.Component;
+import upec.episen.eco.models.machine.Machine;
+import upec.episen.eco.models.machine.Matter;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class MatterImpactScore {
-       private static final Map<String, Integer> impactScores = new HashMap<>();
-       private static final Map<String, Double> impactFactors = new HashMap<>();
-       private static final Map<String, Double> averagePersonUsage = new HashMap<>();
+
+       public static final Map<String, MaterialImpact> MATERIAL_DB = new HashMap<>();
 
        static {
-              impactScores.put("Cobalt", 8);
-              impactScores.put("Galvanized Steel", 6);
-              impactScores.put("Glass", 2);
-              impactScores.put("Gold", 9);
-              impactScores.put("Copper", 5);
-              impactScores.put("Rubber (tires)", 4);
-              impactScores.put("Steel (spokes)", 6);
-              impactScores.put("Polycarbonate", 5);
-              impactScores.put("Maple Wood", 3);
-              impactScores.put("Nichrome", 7);
-              impactScores.put("ABS Plastic", 6);
-              impactScores.put("Plastic", 5);
-              impactScores.put("Steel", 6);
-              impactScores.put("Stainless Steel", 7);
-              impactScores.put("Magnesium", 7);
-              impactScores.put("Leather or Fabric", 4);
-              impactScores.put("Aluminum", 3);
-              impactScores.put("Polyurethane Foam", 5);
-              impactScores.put("Teflon Coating", 6);
-              impactScores.put("Tempered Glass", 3);
-              impactScores.put("Polyurethane", 5);
-              impactScores.put("Nickel", 6);
-              impactScores.put("Ceramic", 4);
-              impactScores.put("Steel/Aluminum", 5);
-              impactScores.put("Fiberglass", 4);
-              impactScores.put("Rubber", 4);
-              impactScores.put("Neodymium Magnets", 8);
-              impactScores.put("Silicon", 4);
-              impactScores.put("Rare Earths", 9);
-              impactScores.put("Steel (carcass)", 6);
-              impactScores.put("Ink", 3);
-              impactScores.put("Lithium", 8);
-              impactScores.put("Ferrite", 5);
+              // Matériaux recyclables (1)
+              MATERIAL_DB.put("Galvanized Steel", new MaterialImpact(2.4, true));
+              MATERIAL_DB.put("Glass", new MaterialImpact(1.1, true));
+              MATERIAL_DB.put("Gold", new MaterialImpact(18750.0, true));
+              MATERIAL_DB.put("Copper", new MaterialImpact(4.0, true));
+              MATERIAL_DB.put("Aluminum", new MaterialImpact(9.5, true));
+              MATERIAL_DB.put("Steel", new MaterialImpact(2.15, true));
+              MATERIAL_DB.put("Iron", new MaterialImpact(2.1, true));
+              MATERIAL_DB.put("Silver", new MaterialImpact(5.0, true));
+              MATERIAL_DB.put("Lead", new MaterialImpact(4.5, true));
+              MATERIAL_DB.put("Zinc", new MaterialImpact(3.4, true));
+              MATERIAL_DB.put("Bamboo", new MaterialImpact(0.1, true));
+              MATERIAL_DB.put("Cobalt", new MaterialImpact(10.0, true));
+              MATERIAL_DB.put("Stainless Steel", new MaterialImpact(5.25, true));
+              MATERIAL_DB.put("Nickel", new MaterialImpact(8.75, true));
+              MATERIAL_DB.put("Magnesium", new MaterialImpact(22.0, true));
+              MATERIAL_DB.put("Polycarbonate", new MaterialImpact(6.1, true));
+              MATERIAL_DB.put("Maple Wood", new MaterialImpact(0.3, true));
+              MATERIAL_DB.put("Titanium", new MaterialImpact(11.0, true));
+              MATERIAL_DB.put("Cotton", new MaterialImpact(0.5, true));
+              MATERIAL_DB.put("ABS Plastic", new MaterialImpact(3.85, true));
+              MATERIAL_DB.put("Tempered Glass", new MaterialImpact(1.5, true));
+              MATERIAL_DB.put("Ceramic", new MaterialImpact(2.25, true));
+              MATERIAL_DB.put("Neodymium Magnets", new MaterialImpact(47.5, true));
+              MATERIAL_DB.put("Silicon", new MaterialImpact(8.5, true));
+              MATERIAL_DB.put("Lithium", new MaterialImpact(25.0, true));
 
-              impactFactors.put("Cobalt", 0.02);
-              impactFactors.put("Galvanized Steel", 0.012);
-              impactFactors.put("Glass", 0.005);
-              impactFactors.put("Gold", 0.03);
-              impactFactors.put("Copper", 0.015);
-              impactFactors.put("Rubber (tires)", 0.01);
-              impactFactors.put("Steel (spokes)", 0.012);
-              impactFactors.put("Polycarbonate", 0.009);
-              impactFactors.put("Maple Wood", 0.002);
-              impactFactors.put("Nichrome", 0.018);
-              impactFactors.put("ABS Plastic", 0.008);
-              impactFactors.put("Plastic", 0.008);
-              impactFactors.put("Steel", 0.012);
-              impactFactors.put("Stainless Steel", 0.014);
-              impactFactors.put("Magnesium", 0.02);
-              impactFactors.put("Leather or Fabric", 0.007);
-              impactFactors.put("Aluminum", 0.01);
-              impactFactors.put("Polyurethane Foam", 0.009);
-              impactFactors.put("Teflon Coating", 0.011);
-              impactFactors.put("Tempered Glass", 0.005);
-              impactFactors.put("Polyurethane", 0.009);
-              impactFactors.put("Nickel", 0.018);
-              impactFactors.put("Ceramic", 0.006);
-              impactFactors.put("Steel/Aluminum", 0.011);
-              impactFactors.put("Fiberglass", 0.007);
-              impactFactors.put("Rubber", 0.01);
-              impactFactors.put("Neodymium Magnets", 0.025);
-              impactFactors.put("Silicon", 0.004);
-              impactFactors.put("Rare Earths", 0.04);
-              impactFactors.put("Steel (carcass)", 0.012);
-              impactFactors.put("Ink", 0.01);
-              impactFactors.put("Lithium", 0.025);
-              impactFactors.put("Ferrite", 0.012);
+              // Matériaux partiellement recyclables ou difficiles à recycler (0)
+              MATERIAL_DB.put("Rubber (tires)", new MaterialImpact(3.6, false));
+              MATERIAL_DB.put("Plastic", new MaterialImpact(4.25, false));
+              MATERIAL_DB.put("Wood (general)", new MaterialImpact(0.5, false));
+              MATERIAL_DB.put("Fiberglass", new MaterialImpact(3.15, false));
+              MATERIAL_DB.put("Rare Earths", new MaterialImpact(37.5, false));
+              MATERIAL_DB.put("Rubber", new MaterialImpact(3.6, false));
 
-              averagePersonUsage.put("Plastic", 34000.0);
-              averagePersonUsage.put("ABS Plastic", 5000.0);
-              averagePersonUsage.put("Polyurethane", 2000.0);
-              averagePersonUsage.put("Polyurethane Foam", 1500.0);
-              averagePersonUsage.put("Aluminum", 24000.0);
-              averagePersonUsage.put("Steel", 220000.0);
-              averagePersonUsage.put("Stainless Steel", 14000.0);
-              averagePersonUsage.put("Galvanized Steel", 14000.0);
-              averagePersonUsage.put("Steel (carcass)", 30000.0);
-              averagePersonUsage.put("Steel (spokes)", 5000.0);
-              averagePersonUsage.put("Copper", 2200.0);
-              averagePersonUsage.put("Gold", 0.1);
-              averagePersonUsage.put("Lithium", 1.5);
-              averagePersonUsage.put("Cobalt", 7.0);
-              averagePersonUsage.put("Nickel", 800.0);
-              averagePersonUsage.put("Rare Earths", 17.0);
-              averagePersonUsage.put("Neodymium Magnets", 5.0);
-              averagePersonUsage.put("Glass", 42000.0);
-              averagePersonUsage.put("Tempered Glass", 5000.0);
-              averagePersonUsage.put("Rubber", 8500.0);
-              averagePersonUsage.put("Rubber (tires)", 7000.0);
-              averagePersonUsage.put("Silicon", 50.0);
-              averagePersonUsage.put("Ceramic", 3000.0);
-              averagePersonUsage.put("Leather or Fabric", 10000.0);
-              averagePersonUsage.put("Ferrite", 10.0);
-              averagePersonUsage.put("Maple Wood", 5000.0);
-              averagePersonUsage.put("Magnesium", 100.0);
-              averagePersonUsage.put("Fiberglass", 500.0);
-              averagePersonUsage.put("Polycarbonate", 500.0);
-              averagePersonUsage.put("Nichrome", 5.0);
-              averagePersonUsage.put("Teflon Coating", 50.0);
-              averagePersonUsage.put("Ink", 100.0);
+              // Matériaux difficilement recyclables (0)
+              MATERIAL_DB.put("Tungsten", new MaterialImpact(10.0, false));
+              MATERIAL_DB.put("Glass Fiber", new MaterialImpact(2.0, false));
+              MATERIAL_DB.put("Carbon Fiber", new MaterialImpact(24.0, false));
+              MATERIAL_DB.put("Wool", new MaterialImpact(1.5, false));
+              MATERIAL_DB.put("Polyester", new MaterialImpact(5.0, false));
+              MATERIAL_DB.put("Polyurethane Foam", new MaterialImpact(4.65, false));
+              MATERIAL_DB.put("Teflon Coating", new MaterialImpact(6.75, false));
+              MATERIAL_DB.put("Polyurethane", new MaterialImpact(4.35, false));
+              MATERIAL_DB.put("Leather", new MaterialImpact(20.0, false));
+              MATERIAL_DB.put("Fabric", new MaterialImpact(14.25, false));
+              MATERIAL_DB.put("Ink", new MaterialImpact(3.75, false));
+              MATERIAL_DB.put("Ferrite", new MaterialImpact(3.0, false));
        }
 
-       public static int getImpactScore(String material) {
-              return impactScores.getOrDefault(material, 5);
-       }
+       public double calculateMachineFootprint(Machine machine) {
+              double totalFootprint = 0.0;
 
-       public static double getImpactFactor(String material) {
-              return impactFactors.getOrDefault(material, 0.01);
-       }
-
-       public static double getAverageUsage(String material) {
-              return averagePersonUsage.getOrDefault(material, 1000.0);
-       }
-
-       public static double calculateUsageAdjustment(Map<String, Double> materialUsage) {
-              final double[] volumeAdjustment = {0};
-
-              materialUsage.forEach((material, usage) -> {
-                     double average = getAverageUsage(material);
-
-                     if (usage > average) {
-                            double excessRatio = usage / average;
-                            volumeAdjustment[0] -= Math.log10(excessRatio) * 0.5;
-                     } else {
-                            double savingRatio = average / Math.max(usage, 1);
-                            volumeAdjustment[0] += Math.log10(savingRatio) * 0.2;
+              for (Component component : machine.getResources()) {
+                     for (Matter matter : component.getMatters()) {
+                            double matterFootprint = calculateMatterFootprint(matter);
+                            totalFootprint += matterFootprint;
                      }
-              });
+              }
 
-              return Math.max(-5, Math.min(3, volumeAdjustment[0]));
+              totalFootprint += machine.getDefaultFootprint();
+
+              return totalFootprint;
+       }
+
+       private double calculateMatterFootprint(Matter matter) {
+              MaterialImpact materialImpact = MATERIAL_DB.get(matter.getValue());
+
+              if (materialImpact == null) {
+                     return 0.0;
+              }
+
+              return (matter.getVolume() / 1000.0) * materialImpact.getEmissionFactor();
+       }
+
+       public double calculateTotalFootprint(Collection collection) {
+              double totalFootprint = 0.0;
+
+              for (Machine machine : collection.getMachines()) {
+                     totalFootprint += calculateMachineFootprint(machine);
+              }
+
+              return totalFootprint;
+       }
+
+       public RecyclabilityResult evaluateMachineRecyclability(Machine machine) {
+              double totalMass = 0.0;
+              double recyclableMass = 0.0;
+
+              for (Component component : machine.getResources()) {
+                     for (Matter matter : component.getMatters()) {
+                            double matterMass = matter.getVolume();
+                            totalMass += matterMass;
+
+                            MaterialImpact materialImpact = MATERIAL_DB.get(matter.getValue());
+
+                            if (materialImpact != null && materialImpact.isRecyclable()) {
+                                   recyclableMass += matterMass;
+                            }
+                     }
+              }
+
+              double recyclabilityPercentage = (totalMass > 0) ? (recyclableMass / totalMass) * 100 : 0;
+
+              return new RecyclabilityResult(recyclabilityPercentage);
+       }
+
+       public RecyclabilityResult evaluateCollectionRecyclability(Collection collection) {
+              double totalMass = 0.0;
+              double recyclableMass = 0.0;
+
+              for (Machine machine : collection.getMachines()) {
+                     for (Component component : machine.getResources()) {
+                            for (Matter matter : component.getMatters()) {
+                                   double matterMass = matter.getVolume();
+                                   totalMass += matterMass;
+
+                                   MaterialImpact materialImpact = MATERIAL_DB.get(matter.getValue());
+
+                                   if (materialImpact != null && materialImpact.isRecyclable()) {
+                                          recyclableMass += matterMass;
+                                   }
+                            }
+                     }
+              }
+
+              double recyclabilityPercentage = (totalMass > 0) ? (recyclableMass / totalMass) * 100 : 0;
+
+              return new RecyclabilityResult(recyclabilityPercentage);
+       }
+
+
+       public double calculateUserScore(Collection collection) {
+              double totalFootprint = calculateTotalFootprint(collection);
+              RecyclabilityResult recyclability = evaluateCollectionRecyclability(collection);
+              double recyclabilityPercentage = recyclability.getRecyclabilityPercentage();
+
+              double minCarbonForHighScore = 200.0;
+              double maxCarbonForMidScore = 5059.60;
+              double maxCarbonForLowScore1 = 10000.0;
+              double maxCarbonForLowScore2 = 30000.0;
+
+              double carbonScore;
+
+              if (totalFootprint >= maxCarbonForLowScore2) {
+                     carbonScore = 0.0;
+              } else if (totalFootprint >= maxCarbonForLowScore1) {
+                     carbonScore = 30.0 - ((totalFootprint - maxCarbonForLowScore1) * 20.0)
+                             / (maxCarbonForLowScore2 - maxCarbonForLowScore1);
+              } else if (totalFootprint >= maxCarbonForMidScore) {
+                     carbonScore = 50.0 - ((totalFootprint - maxCarbonForMidScore) * 20.0)
+                             / (maxCarbonForLowScore1 - maxCarbonForMidScore);
+              } else if (totalFootprint >= minCarbonForHighScore) {
+                     carbonScore = 95.0 - ((totalFootprint - minCarbonForHighScore) * 45.0)
+                             / (maxCarbonForMidScore - minCarbonForHighScore);
+              } else {
+                     carbonScore = 95.0;
+              }
+
+              // Pondération
+              double carbonWeight = 0.7;
+              double recyclabilityWeight = 0.3;
+
+              double score = (carbonScore * carbonWeight)
+                      + (recyclabilityPercentage * recyclabilityWeight);
+
+              // Garantir score entre 0 et 100
+              return Math.min(Math.max(score, 0), 100);
+       }
+       public boolean isMaterialRecyclable(String materialName) {
+              MaterialImpact materialImpact = MATERIAL_DB.get(materialName);
+              return materialImpact != null && materialImpact.isRecyclable();
        }
 }

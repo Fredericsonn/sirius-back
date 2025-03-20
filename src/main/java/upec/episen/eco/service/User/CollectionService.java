@@ -7,12 +7,14 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import upec.episen.eco.controllers.User.CollectionController;
 import upec.episen.eco.exceptions.CollectionNotFoundException;
 import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.User.User;
 import upec.episen.eco.models.machine.*;
 import upec.episen.eco.models.machine.Algo.MatterImpactScore;
+import upec.episen.eco.models.machine.Algo.RecyclabilityResult;
 import upec.episen.eco.repositories.User.ICollection;
 import upec.episen.eco.repositories.User.IUser;
 
@@ -24,6 +26,9 @@ public class CollectionService {
 
     @Autowired
     private IUser iuser;
+
+
+
 
     public List<Collection> getAllCollections() {
         return icollection.findAll();
@@ -73,44 +78,39 @@ public class CollectionService {
 
         else throw new UserNotFoundException(userId);
     }
-//Algorithme khalil pour le calcule de l'impact materiel
+
+    //=======================================================================================================================================/
     public double calculateCollectionImpact(Long collectionId) throws CollectionNotFoundException {
+        // Récupère la collection en fonction de son ID
         Collection collection = getCollectionById(collectionId);
-        Set<Machine> machines = collection.getMachines();
 
-        double totalImpact = 0;
-        double totalVolume = 0;
-        Map<String, Double> materialUsage = new HashMap<>();
+        // Crée une instance de MatterImpactScore pour utiliser la méthode de calcul
+        MatterImpactScore matterImpactScore = new MatterImpactScore();
 
-        for (Machine machine : machines) {
-            for (Component component : machine.getResources()) {
-                for (Matter matter : component.getMatters()) {
-                    String material = matter.getValue();
-                    double volume = matter.getVolume();
+        // Appelle la méthode de calcul de l'impact carbone total pour la collection
+        return matterImpactScore.calculateTotalFootprint(collection);  // Calcul de l'empreinte carbone à partir de la collection
 
-                    double impactFactor = MatterImpactScore.getImpactFactor(material);
-                    double materialImpact = volume * impactFactor;
-
-                    totalImpact += materialImpact;
-                    totalVolume += volume;
-
-                    materialUsage.put(material, materialUsage.getOrDefault(material, 0.0) + volume);
-                }
-            }
-        }
-
-
-        double averageImpact = totalImpact / totalVolume;
-        double baseScore = Math.max(1, 10 - (averageImpact * 100));
-
-        double volumeAdjustment = MatterImpactScore.calculateUsageAdjustment(materialUsage);
-
-        double finalScore = baseScore + volumeAdjustment;
-
-        double result = Math.max(1, Math.min(10, finalScore));
-
-        BigDecimal bd = new BigDecimal(result);
-        return bd.doubleValue();
     }
+    public RecyclabilityResult calculateCollectionRecyclability(Long collectionId) throws CollectionNotFoundException {
+        // Récupère la collection en fonction de son ID
+        Collection collection = getCollectionById(collectionId);
+
+        // Crée une instance de MatterImpactScore pour utiliser la méthode d'évaluation
+        MatterImpactScore matterImpactScore = new MatterImpactScore();
+
+        // Appelle la méthode d'évaluation de la recyclabilité pour la collection
+        return matterImpactScore.evaluateCollectionRecyclability(collection); // Correction: utilise la méthode pour Collection
+    }
+    public double calculateScoreImapct(Long collectionId) throws CollectionNotFoundException {
+        // Récupère la collection en fonction de son ID
+        Collection collection = getCollectionById(collectionId);
+
+        // Crée une instance de MatterImpactScore pour utiliser la méthode d'évaluation
+        MatterImpactScore matterImpactScore = new MatterImpactScore();
+
+        // Appelle la méthode d'évaluation de la recyclabilité pour la collection
+        return matterImpactScore.calculateUserScore(collection); // Correction: utilise la méthode pour Collection
+    }
+
 }
 
