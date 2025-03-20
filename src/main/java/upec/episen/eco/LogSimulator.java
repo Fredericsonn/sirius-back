@@ -24,10 +24,9 @@ public class LogSimulator {
         System.out.println("Démarrage du simulateur de logs en continu. Appuyez sur Ctrl+C pour arrêter.");
 
         try {
-            // Boucle infinie pour générer des logs en continu
             while (true) {
                 generateRandomLog();
-                TimeUnit.SECONDS.sleep(1); // Attendre 1 seconde entre chaque log
+                TimeUnit.SECONDS.sleep(1);
             }
         } catch (InterruptedException e) {
             System.out.println("Simulateur interrompu.");
