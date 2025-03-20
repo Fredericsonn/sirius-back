@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upec.episen.eco.exceptions.ConsumptionNotFoundException;
 import upec.episen.eco.service.OptimizedConsumption.OptimizationService;
-import upec.episen.eco.service.OptimizedConsumption.OptimizedConsumptionResult;
+import upec.episen.eco.models.optimization.OptimizedConsumptionResult;
 import upec.episen.eco.service.OptimizedConsumption.QuizService;
 
 import java.util.HashMap;

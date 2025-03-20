@@ -1,4 +1,4 @@
-package upec.episen.eco.service.OptimizedConsumption;
+package upec.episen.eco.models.optimization;
 
 import upec.episen.eco.models.consumption.Consumption;
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import upec.episen.eco.exceptions.ConsumptionNotFoundException;
 import upec.episen.eco.models.consumption.Consumption;
 import upec.episen.eco.models.consumption.ConsumptionItem;
+import upec.episen.eco.models.optimization.OptimizedConsumptionResult;
 import upec.episen.eco.service.consumption.ConsumptionService;
 
 import java.util.*;
@@ -73,8 +74,8 @@ public class OptimizationService {
 
 
 
-        // voici l'objet a afficher au front
-        return new OptimizedConsumptionResult(optimizedCarbonFootprint,optimizedFrequencies, consumption, howManyWeOptim);
+        return new OptimizedConsumptionResult(optimizedCarbonFootprint,optimizedFrequencies, consumption, howManyWeOptim);        // voici l'objet a afficher au front
+
     }
 
 
