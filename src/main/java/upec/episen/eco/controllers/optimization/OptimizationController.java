@@ -29,7 +29,7 @@ public class OptimizationController {
             quizService.saveConstraints(consumptionId, constraints);
             return ResponseEntity.ok("Constraints saved.");
         } catch (Exception e) {
-            //  Gestion d'erreur basique.  Vous devriez idéalement avoir des exceptions plus spécifiques.
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving constraints: " + e.getMessage());
         }
     }
