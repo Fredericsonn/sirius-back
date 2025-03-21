@@ -14,6 +14,7 @@ import upec.episen.eco.models.machine.Machine;
 import upec.episen.eco.models.machine.Matter;
 import upec.episen.eco.models.machine.Vehicle;
 import upec.episen.eco.service.User.CollectionService;
+import upec.episen.eco.service.machine.MatterImpactScore;
 
 import java.util.ArrayList;
 import java.util.List;

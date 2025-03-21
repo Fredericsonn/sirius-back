@@ -1,6 +1,8 @@
-package upec.episen.eco.models.machine.Algo;
+package upec.episen.eco.service.machine;
 
 import upec.episen.eco.models.User.Collection;
+import upec.episen.eco.models.machine.Algo.MaterialImpact;
+import upec.episen.eco.models.machine.Algo.RecyclabilityResult;
 import upec.episen.eco.models.machine.Component;
 import upec.episen.eco.models.machine.Machine;
 import upec.episen.eco.models.machine.Matter;
@@ -179,8 +181,7 @@ public class MatterImpactScore {
               double score = (carbonScore * carbonWeight)
                       + (recyclabilityPercentage * recyclabilityWeight);
 
-              // Garantir score entre 0 et 100
-              return Math.min(Math.max(score, 0), 100);
+              return score;
        }
        public boolean isMaterialRecyclable(String materialName) {
               MaterialImpact materialImpact = MATERIAL_DB.get(materialName);

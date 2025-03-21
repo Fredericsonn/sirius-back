@@ -1,18 +1,12 @@
 package upec.episen.eco.service.machine;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import upec.episen.eco.exceptions.ConsumptionNotFoundException;
-import upec.episen.eco.models.consumption.Consumption;
-import upec.episen.eco.models.consumption.ConsumptionItem;
 import upec.episen.eco.models.machine.*;
-import upec.episen.eco.models.machine.Algo.MatterImpactScore;
 import upec.episen.eco.models.machine.enums.UsageCategory;
 import upec.episen.eco.repositories.machine.IDevice;
 import upec.episen.eco.repositories.machine.IVehicle;

@@ -1,22 +1,19 @@
 package upec.episen.eco.service.User;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import upec.episen.eco.controllers.User.CollectionController;
 import upec.episen.eco.exceptions.CollectionNotFoundException;
 import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.User.User;
 import upec.episen.eco.models.machine.*;
-import upec.episen.eco.models.machine.Algo.MatterImpactScore;
 import upec.episen.eco.models.machine.Algo.RecyclabilityResult;
 import upec.episen.eco.repositories.User.ICollection;
 import upec.episen.eco.repositories.User.IUser;
+import upec.episen.eco.service.machine.MatterImpactScore;
 
 @Service
 public class CollectionService {
@@ -81,35 +78,26 @@ public class CollectionService {
 
     //=======================================================================================================================================/
     public double calculateCollectionImpact(Long collectionId) throws CollectionNotFoundException {
-        // Récupère la collection en fonction de son ID
         Collection collection = getCollectionById(collectionId);
 
-        // Crée une instance de MatterImpactScore pour utiliser la méthode de calcul
         MatterImpactScore matterImpactScore = new MatterImpactScore();
 
-        // Appelle la méthode de calcul de l'impact carbone total pour la collection
-        return matterImpactScore.calculateTotalFootprint(collection);  // Calcul de l'empreinte carbone à partir de la collection
+        return matterImpactScore.calculateTotalFootprint(collection);
 
     }
     public RecyclabilityResult calculateCollectionRecyclability(Long collectionId) throws CollectionNotFoundException {
-        // Récupère la collection en fonction de son ID
         Collection collection = getCollectionById(collectionId);
 
-        // Crée une instance de MatterImpactScore pour utiliser la méthode d'évaluation
         MatterImpactScore matterImpactScore = new MatterImpactScore();
 
-        // Appelle la méthode d'évaluation de la recyclabilité pour la collection
-        return matterImpactScore.evaluateCollectionRecyclability(collection); // Correction: utilise la méthode pour Collection
+        return matterImpactScore.evaluateCollectionRecyclability(collection);
     }
     public double calculateScoreImapct(Long collectionId) throws CollectionNotFoundException {
-        // Récupère la collection en fonction de son ID
         Collection collection = getCollectionById(collectionId);
 
-        // Crée une instance de MatterImpactScore pour utiliser la méthode d'évaluation
         MatterImpactScore matterImpactScore = new MatterImpactScore();
 
-        // Appelle la méthode d'évaluation de la recyclabilité pour la collection
-        return matterImpactScore.calculateUserScore(collection); // Correction: utilise la méthode pour Collection
+        return matterImpactScore.calculateUserScore(collection); 
     }
 
 }
