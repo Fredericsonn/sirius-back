@@ -232,4 +232,5 @@ public class ConsumptionService {
 
         return carbonEmitted;
     }
+
 }

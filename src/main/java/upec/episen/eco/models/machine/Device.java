@@ -9,7 +9,8 @@ import upec.episen.eco.models.machine.enums.UsageCategory;
 @Entity
 public class Device extends Machine {
 
-    public Device(int id, String name, double f, UsageCategory us, String img, Set<Component> r, double p) {
+
+    public Device(int id, String name, double f, UsageCategory us, String img, Set<Component> r) {
         super(id, name, f, us, img, r);
     }
 
