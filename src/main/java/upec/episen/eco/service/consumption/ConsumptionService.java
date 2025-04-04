@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import upec.episen.eco.models.User.User;
 import upec.episen.eco.models.consumption.Consumption;
 import upec.episen.eco.models.consumption.ConsumptionItem;
 import upec.episen.eco.models.consumption.enums.EnergyType;
+import upec.episen.eco.models.machine.Algo.MatterImpactScore;
 import upec.episen.eco.models.machine.Device;
 import upec.episen.eco.models.machine.Machine;
 import upec.episen.eco.models.machine.Vehicle;
@@ -233,4 +236,34 @@ public class ConsumptionService {
         return carbonEmitted;
     }
 
+    // a method that iterates over all the machines in the consumption items within a consumption object and sums their corresponding impact scores
+    public double calculateConsumptionImpactScore(Consumption consumption) {
+
+        MatterImpactScore mis = new MatterImpactScore();
+
+        return consumption.getConsumptionItems().stream().mapToDouble(item -> mis.calculateMachineFootprint(item.getMachine())).sum();
+    }
+
+    // a method that creates a MIR report for each item in the consumption
+    public Map<Long, Double> itemsMIReporter(Consumption consumption) {
+
+        Map<Long, Double> report = new HashMap<>();
+
+        MatterImpactScore mis = new MatterImpactScore();
+
+        // we calculate each item's mir and add it to the report
+        consumption.getConsumptionItems().forEach(item -> report.put(item.getId(), mis.calculateMachineFootprint(item.getMachine())));
+
+        return report;
+    }
+
+    // a method that calculates a consumption's MIR 
+    public double manufacturingImpactRatioCalculator(Consumption consumption) {
+
+        double manufacturingFootprint = calculateConsumptionImpactScore(consumption);
+
+        double energyConsumptionFootprint = consumption.getTotalCarbonEmitted();
+
+        return manufacturingFootprint / (manufacturingFootprint + energyConsumptionFootprint * 365);
+    }
 }

@@ -114,5 +114,18 @@ public class ConsumptionController {
         return ResponseEntity.status(status).body(Map.of("msg", msg));
     }
 
+    @PostMapping("/mir")
+    public ResponseEntity<?> getManufacturingImpactRatioReport(@RequestBody Consumption consumption) {
 
+        Map<String, Object> body = new HashMap<>();
+
+        double consumptionDefaultFootprint= consumptionservice.calculateConsumptionImpactScore(consumption);
+
+        Map<Long, Double> MIR_Report = consumptionservice.itemsMIReporter(consumption);
+
+        body.put("score", consumptionDefaultFootprint);
+        body.put("report", MIR_Report);
+
+        return ResponseEntity.ok(body);
+    }
 }
