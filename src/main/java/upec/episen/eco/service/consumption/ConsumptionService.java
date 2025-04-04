@@ -201,8 +201,7 @@ public class ConsumptionService {
         return BigDecimal.valueOf(carbonemitted).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
-    // in this version, the items parameter are all identical and predifined in the
-    // AlgoParam entity
+    // in this version, the items parameter are all identical and predifined in the AlgoParam entity
     public double calculateTotalCarbonEmittedTemp(ConsumptionItem item) {
 
         Machine machine = item.getMachine();
@@ -233,4 +232,5 @@ public class ConsumptionService {
 
         return carbonEmitted;
     }
+
 }

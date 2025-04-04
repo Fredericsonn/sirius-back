@@ -16,10 +16,9 @@ public class Matter {
     private double volume;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference // Add this annotation
+    @JsonBackReference
     private Component component;
 
-    // Constructeur par défaut nécessaire pour JPA
     public Matter() {}
 
     public Matter(String value, double volume) {
@@ -59,6 +58,7 @@ public class Matter {
     public void setComponent(Component component) {
         this.component = component;
     }
+
 
     @Override
     public String toString() {

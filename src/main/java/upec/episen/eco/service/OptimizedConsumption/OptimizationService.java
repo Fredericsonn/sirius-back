@@ -1,15 +1,14 @@
 package upec.episen.eco.service.OptimizedConsumption;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import upec.episen.eco.exceptions.ConsumptionNotFoundException;
 import upec.episen.eco.models.consumption.Consumption;
 import upec.episen.eco.models.consumption.ConsumptionItem;
+import upec.episen.eco.models.optimization.OptimizedConsumptionResult;
 import upec.episen.eco.service.consumption.ConsumptionService;
+
+import java.util.*;
 
 @Service
 public class OptimizationService {
@@ -18,6 +17,23 @@ public class OptimizationService {
     private QuizService quizService;
     @Autowired
     private ConsumptionService consumptionService;
+
+
+
+    private double calculateTotalCarbonFootprint(double[] frequencies, List<ConsumptionItem> orderedItems) {
+        double totalFootprint = 0.0;
+        for (int i = 0; i < orderedItems.size(); i++) {
+            ConsumptionItem item = orderedItems.get(i);
+            double frequency = frequencies[i];
+            totalFootprint += consumptionService.calculateItemCarbonFootprint(//cette methode prends 2 param : le consumption_item concerné ( on va creer un dans la prochene ligne ) et le type d'energie de ce item
+                    new ConsumptionItem(item.getName(), item.getMachine(), item.getEnergyInput(), frequency, item.getQuantity(), item.getEnergyType()),// le consumption_item
+                    item.getEnergyType()// son type
+            );}
+
+        return totalFootprint;
+    }
+
+
 
     public OptimizedConsumptionResult optimizeConsumption(Long consumptionId) throws ConsumptionNotFoundException {
 
@@ -58,20 +74,9 @@ public class OptimizationService {
 
 
 
-        // voici l'objet a afficher au front
-        return new OptimizedConsumptionResult(optimizedFrequencies, consumption, howManyWeOptim);
+        return new OptimizedConsumptionResult(optimizedCarbonFootprint,optimizedFrequencies, consumption, howManyWeOptim);        // voici l'objet a afficher au front
+
     }
 
-    private double calculateTotalCarbonFootprint(double[] frequencies, List<ConsumptionItem> orderedItems) {
-        double totalFootprint = 0.0;
-        for (int i = 0; i < orderedItems.size(); i++) {
-            ConsumptionItem item = orderedItems.get(i);
-            double frequency = frequencies[i];
-            totalFootprint += consumptionService.calculateItemCarbonFootprint(//cette methode prends 2 param : le consumption_item concerné ( on va creer un dans la prochene ligne ) et le type d'energie de ce item
-                    new ConsumptionItem(item.getName(), item.getMachine(), item.getEnergyInput(), frequency, item.getQuantity(), item.getEnergyType()),// le consumption_item
-                    item.getEnergyType()// son type
-            );}
 
-        return totalFootprint;
-    }
 }
