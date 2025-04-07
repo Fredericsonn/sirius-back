@@ -51,18 +51,18 @@ public class ConsumptionServiceTest {
 
     @Test
     void testGetAllConsumptionsByUser() throws UserNotFoundException {
-        User mockUser = new User();
-        mockUser.setId(1L);
-        when(userService.getUserById(1L)).thenReturn(mockUser);
+        User mockedUser = new User();
+        mockedUser.setId(1L);
+        when(userService.getUserById(1L)).thenReturn(mockedUser);
 
         Consumption consumption = new Consumption();
-        when(consumptionRepo.findAllByUser(mockUser)).thenReturn(List.of(consumption));
+        when(consumptionRepo.findAllByUser(mockedUser)).thenReturn(List.of(consumption));
 
         List<Consumption> result = consumptionService.getAllConsumptionsByUser(1L);
 
         assertEquals(1, result.size());
         verify(userService).getUserById(1L);
-        verify(consumptionRepo).findAllByUser(mockUser);
+        verify(consumptionRepo).findAllByUser(mockedUser);
     }
 
     @Test
