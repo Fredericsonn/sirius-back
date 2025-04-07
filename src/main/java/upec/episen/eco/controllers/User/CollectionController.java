@@ -2,12 +2,15 @@ package upec.episen.eco.controllers.User;
 import upec.episen.eco.models.User.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import upec.episen.eco.exceptions.CollectionNotFoundException;
+import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.machine.Algo.*;
 import upec.episen.eco.models.machine.Component;
 import upec.episen.eco.models.machine.Machine;
@@ -17,6 +20,7 @@ import upec.episen.eco.service.User.CollectionService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/collection")
@@ -26,7 +30,15 @@ public class CollectionController {
     private CollectionService collectionService;
 
     @GetMapping
-    public ResponseEntity<List<Collection>> getAllCollections() {
+    public ResponseEntity<?> getAllCollections(@RequestParam(name = "userId", required = false) Long userId) {
+
+        if (userId != null) {
+            try {
+                return ResponseEntity.ok(collectionService.getAllCollectionsByUser(userId));
+            } catch (UserNotFoundException e) {
+                return ResponseEntity.internalServerError().body(Map.of("errorMsg", e.getMessage()));
+            }
+        }
         return ResponseEntity.ok(collectionService.getAllCollections());
     }
 

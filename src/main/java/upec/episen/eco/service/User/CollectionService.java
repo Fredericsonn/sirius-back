@@ -1,13 +1,10 @@
 package upec.episen.eco.service.User;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import upec.episen.eco.controllers.User.CollectionController;
 import upec.episen.eco.exceptions.CollectionNotFoundException;
 import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.User.Collection;
