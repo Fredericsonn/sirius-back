@@ -1,5 +1,6 @@
 package upec.episen.eco.controllers.User;
-import upec.episen.eco.models.User.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import upec.episen.eco.exceptions.CollectionNotFoundException;
 import upec.episen.eco.exceptions.UserNotFoundException;
 import upec.episen.eco.models.machine.Algo.*;
@@ -16,6 +18,7 @@ import upec.episen.eco.models.machine.Component;
 import upec.episen.eco.models.machine.Machine;
 import upec.episen.eco.models.machine.Matter;
 import upec.episen.eco.models.machine.Vehicle;
+import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.service.User.CollectionService;
 
 import java.util.ArrayList;
@@ -49,7 +52,7 @@ public class CollectionController {
     }
     @GetMapping("/{id}/recyclable")
     public ResponseEntity<RecyclabilityResult> getRecyclabilityImpact(@PathVariable Long id) throws CollectionNotFoundException {
-        RecyclabilityResult result = collectionService.calculateCollectionRecyclability(id); // Correction du nom de la méthode
+        RecyclabilityResult result = collectionService.calculateCollectionRecyclability(id); 
         return ResponseEntity.ok(result);
     }
     @GetMapping("/{id}/score")

@@ -1,12 +1,12 @@
 package upec.episen.eco.models.machine.Algo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import upec.episen.eco.models.User.Collection;
 import upec.episen.eco.models.machine.Component;
 import upec.episen.eco.models.machine.Machine;
 import upec.episen.eco.models.machine.Matter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MatterImpactScore {
 
@@ -75,7 +75,7 @@ public class MatterImpactScore {
 
               totalFootprint += machine.getDefaultFootprint();
 
-              return totalFootprint;
+              return totalFootprint * 10;
        }
 
        private double calculateMatterFootprint(Matter matter) {
