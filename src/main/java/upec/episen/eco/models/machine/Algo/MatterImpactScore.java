@@ -62,8 +62,21 @@ public class MatterImpactScore {
               MATERIAL_DB.put("Ink", new MaterialImpact(3.75, false));
               MATERIAL_DB.put("Ferrite", new MaterialImpact(3.0, false));
        }
-
        public double calculateMachineFootprint(Machine machine) {
+              double totalFootprint = 0.0;
+
+              for (Component component : machine.getResources()) {
+                     for (Matter matter : component.getMatters()) {
+                            double matterFootprint = calculateMatterFootprint(matter);
+                            totalFootprint += matterFootprint;
+                     }
+              }
+
+              totalFootprint += machine.getDefaultFootprint();
+
+              return totalFootprint;
+       }
+       public double calculateMachineFootprint2(Machine machine) {
               String machineType = machine.getName(); 
 
               switch (machineType) {
