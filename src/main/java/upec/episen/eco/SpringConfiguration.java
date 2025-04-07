@@ -3,6 +3,8 @@ package upec.episen.eco;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -21,5 +23,4 @@ public class SpringConfiguration implements WebMvcConfigurer {
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); // Allow all requests
         return http.build();
     }
-
 }
