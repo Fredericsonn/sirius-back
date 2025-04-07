@@ -1,6 +1,7 @@
 package upec.episen.eco.service.machine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ import upec.episen.eco.repositories.machine.IDevice;
 import upec.episen.eco.repositories.machine.IVehicle;
 
 @Service
-public class MachineService {
+public class MachineService{
 
     @Autowired
     private IDevice devicerepo;

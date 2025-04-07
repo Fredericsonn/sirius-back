@@ -116,7 +116,25 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.6.1</version> <!-- or try 3.5.0 or 3.4.1 -->
+		</dependency>
+
+
+
+
+
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+
 
 	<build>
 		<plugins>

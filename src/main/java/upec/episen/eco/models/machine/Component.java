@@ -29,12 +29,12 @@ public class Component {
     private String name;
 
     @OneToMany(mappedBy = "component", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // Add this annotation
+    @JsonManagedReference
     private Set<Matter> matters = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "machine_id")
-    @JsonBackReference // Add this annotation
+    @JsonBackReference
     private Machine machine;
 
 

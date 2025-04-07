@@ -43,5 +43,4 @@ public class MachineController {
         category = Helper.usageCategoryRectifier(category);
         return machineservice.getAllMachinesByUsageCategory(UsageCategory.valueOf(category));
     }
-
 }
