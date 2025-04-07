@@ -84,7 +84,7 @@ public class ConsumptionServiceTest {
     @Test
     void testSaveConsumptionSetsTotalCarbonAndDate() throws MachineNotFoundException {
         Device device = mock(Device.class);
-        when(device.getId()).thenReturn(1); // or 1 depending on your model
+        when(device.getId()).thenReturn(1);
         when(device.getType()).thenReturn("Device");
 
         ConsumptionItem item = new ConsumptionItem();
@@ -101,8 +101,6 @@ public class ConsumptionServiceTest {
         when(consumptionRepo.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         Consumption saved = consumptionService.saveConsumption(consumption);
-
-        System.out.println("Emitted carbon: " + saved.getTotalCarbonEmitted());
 
         assertEquals(0.5, saved.getTotalCarbonEmitted());
 
