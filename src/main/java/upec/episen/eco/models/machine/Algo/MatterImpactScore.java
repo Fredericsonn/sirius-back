@@ -75,7 +75,7 @@ public class MatterImpactScore {
 
               totalFootprint += machine.getDefaultFootprint();
 
-              return totalFootprint;
+              return totalFootprint * 10;
        }
 
        private double calculateMatterFootprint(Matter matter) {
