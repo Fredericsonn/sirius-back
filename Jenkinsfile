@@ -15,6 +15,18 @@ pipeline {
                 git branch: "${BRANCH}", url: "${env.REPO_URL}"
             }
         }
+        stage("Test") {
+            agent { 
+                docker { 
+                    image 'ecotracer/back-agent'
+                } 
+            }
+            steps {
+                script {    
+                    sh 'mvn test'
+                }
+            }
+        }
         stage("Build") {
             agent { 
                 docker { 
