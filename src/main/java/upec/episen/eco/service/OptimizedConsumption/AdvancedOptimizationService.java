@@ -19,7 +19,7 @@ public class AdvancedOptimizationService {
     private ConsumptionService consumptionService;
 
     private static final double COST_PER_KWH = 0.2016;
-    private static final int MAX_ITERATIONS = 100000;
+    private static final int MAX_ITERATIONS = 100;
     private static final double CARBON_TOLERANCE = 0.1;
     private static final double ADJUSTMENT_STEP = 0.05;
 
