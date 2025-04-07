@@ -241,7 +241,7 @@ public class ConsumptionService {
 
         MatterImpactScore mis = new MatterImpactScore();
 
-        return consumption.getConsumptionItems().stream().mapToDouble(item -> mis.calculateMachineFootprint(item.getMachine())).sum();
+        return consumption.getConsumptionItems().stream().mapToDouble(item -> mis.calculateMachineFootprint2(item.getMachine())).sum();
     }
 
     // a method that creates a MIR report for each item in the consumption
