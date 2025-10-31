@@ -21,11 +21,14 @@ pipeline {
                     image 'ecotracer/back-agent'
                 } 
             }
-            steps {
-                script {    
+        steps {
+            script {
+                withEnv(["DB=${env.DATABASE_URL}"]) {
                     sh 'mvn clean package'
                 }
             }
+        }
+
         }
         stage("Archive artifact") {
             agent { 
