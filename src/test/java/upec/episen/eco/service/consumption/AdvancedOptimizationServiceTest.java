@@ -1,4 +1,4 @@
-package upec.episen.eco.service.consumption.OptimizedConsumption;
+package upec.episen.eco.service.consumption;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +10,6 @@ import upec.episen.eco.models.consumption.ConsumptionItem;
 import upec.episen.eco.models.consumption.advancedOptimization.AdvancedOptimizationRequest;
 import upec.episen.eco.models.consumption.advancedOptimization.AdvancedOptimizationResult;
 import upec.episen.eco.models.consumption.advancedOptimization.FrequencyConstraint;
-import upec.episen.eco.service.consumption.ConsumptionService;
 import upec.episen.eco.service.OptimizedConsumption.AdvancedOptimizationService;
 
 import java.util.List;
