@@ -9,7 +9,6 @@ pipeline {
     stages {
 
         stage('Load Secrets from Vault') {
-            agent any
             steps {
                 script {
                     withVault([

@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk
+FROM openjdk:26-ea-trixie
 
 WORKDIR /usr/src/app
 
