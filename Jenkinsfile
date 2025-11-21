@@ -19,9 +19,9 @@ pipeline {
                                 [envVar: 'REGISTRY_URL',  vaultKey: 'REGISTRY_URL'],
                                 [envVar: 'IMAGE_NAME',    vaultKey: 'IMAGE_NAME'],
                                 [envVar: 'BRANCH',        vaultKey: 'BRANCH'],
-                                [envVar: 'DATABASE_URL',  vaultKey: 'DATABASE_URL'].
-                                [envVar: 'DATABASE_USER',  vaultKey: 'DATABASE_USER'].
-                                [envVar: 'DATABASE_PASSWORD',  vaultKey: 'DATABASE_URL'].
+                                [envVar: 'DATABASE_URL',  vaultKey: 'DATABASE_URL'],
+                                [envVar: 'DATABASE_USER',  vaultKey: 'DATABASE_USER'],
+                                [envVar: 'DATABASE_PASSWORD',  vaultKey: 'DATABASE_URL'],
                             ]
                         ]]
                     ]) {
