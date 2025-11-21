@@ -15,30 +15,27 @@ pipeline {
                         vaultSecrets: [[
                             path: "jenkins/backend/${ENV}",
                             secretValues: [
-                                [envVar: 'REMOTE_HOST',   vaultKey: 'REMOTE_HOST'],
-                                [envVar: 'REGISTRY_URL',  vaultKey: 'REGISTRY_URL'],
-                                [envVar: 'IMAGE_NAME',    vaultKey: 'IMAGE_NAME'],
-                                [envVar: 'BRANCH',        vaultKey: 'BRANCH'],
-                                [envVar: 'DATABASE_URL',  vaultKey: 'DATABASE_URL'],
-                                [envVar: 'DATABASE_USER',  vaultKey: 'DATABASE_USER'],
-                                [envVar: 'DATABASE_PASSWORD',  vaultKey: 'DATABASE_URL'],
+                                [envVar: 'REMOTE_HOST',          vaultKey: 'REMOTE_HOST'],
+                                [envVar: 'REGISTRY_URL',         vaultKey: 'REGISTRY_URL'],
+                                [envVar: 'IMAGE_NAME',           vaultKey: 'IMAGE_NAME'],
+                                [envVar: 'BRANCH',               vaultKey: 'BRANCH'],
+                                [envVar: 'DATABASE_URL',         vaultKey: 'DATABASE_URL'],
+                                [envVar: 'DATABASE_USER',        vaultKey: 'DATABASE_USER'],
+                                [envVar: 'DATABASE_PASSWORD',    vaultKey: 'DATABASE_PASSWORD']
                             ]
                         ]]
                     ]) {
-                        env.REMOTE_HOST  = REMOTE_HOST
-                        env.REGISTRY_URL = REGISTRY_URL
-                        env.IMAGE_NAME   = IMAGE_NAME
-                        env.BRANCH       = BRANCH
-                        env.DATABASE_URL = DATABASE_URL
-                        env.DATABASE_USER = DATABASE_USER
-                        env.DATABASE_PASSWORD = DATABASE_PASSWORD
-
-                        echo "Secrets loaded and exported globally"
-                        }
+                        env.REMOTE_HOST        = REMOTE_HOST
+                        env.REGISTRY_URL       = REGISTRY_URL
+                        env.IMAGE_NAME         = IMAGE_NAME
+                        env.BRANCH             = BRANCH
+                        env.DATABASE_URL       = DATABASE_URL
+                        env.DATABASE_USER      = DATABASE_USER
+                        env.DATABASE_PASSWORD  = DATABASE_PASSWORD
+                    }
                 }
             }
         }
-
 
         stage('Cloning the repository') {
             agent { docker { image 'ecotracer/back-agent' } }
@@ -50,10 +47,12 @@ pipeline {
         stage("Build") {
             agent { docker { image 'ecotracer/back-agent' } }
             steps {
-                script {
-                    withEnv(["DB=${DATABASE_URL}"]) {
-                        sh 'mvn clean package'
-                    }
+                withEnv([
+                    "DATABASE_URL=${env.DATABASE_URL}",
+                    "DATABASE_USER=${env.DATABASE_USER}",
+                    "DATABASE_PASSWORD=${env.DATABASE_PASSWORD}"
+                ]) {
+                    sh 'mvn clean package'
                 }
             }
         }
