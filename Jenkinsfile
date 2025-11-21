@@ -52,7 +52,7 @@ pipeline {
                     "DATABASE_USER=${env.DATABASE_USER}",
                     "DATABASE_PASSWORD=${env.DATABASE_PASSWORD}"
                 ]) {
-                    sh 'mvn clean package -DskipTests'
+                    sh 'mvn clean package'
                 }
             }
         }
